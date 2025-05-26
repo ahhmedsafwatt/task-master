@@ -159,7 +159,7 @@ export async function signOut() {
     redirect('/auth')
   } catch (error) {
     console.error('Logout error:', error)
-     redirect('/auth?error=Failed to logout properly')
+    redirect('/auth?error=Failed to logout properly')
   }
 }
 
