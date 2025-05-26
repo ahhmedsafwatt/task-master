@@ -21,7 +21,7 @@ export function useCreateTaskForm() {
 
   const updateFormDataFields = <K extends keyof createTaskFormData>(
     field: K,
-    value: createTaskFormData[K],
+    value: createTaskFormData[K]
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }

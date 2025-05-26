@@ -17,7 +17,7 @@ const AUTH_CALLBACK_URL = `${APP_URL}/auth/callback`
  */
 export async function login(
   prevState: AuthResponse | null,
-  formData: FormData,
+  formData: FormData
 ): Promise<AuthResponse> {
   try {
     const rawFormData = Object.fromEntries(formData.entries())
@@ -83,7 +83,7 @@ export async function login(
  */
 export async function signUp(
   prevState: AuthResponse | null,
-  formData: FormData,
+  formData: FormData
 ): Promise<AuthResponse> {
   try {
     // Parse and validate form data
@@ -168,7 +168,7 @@ export async function signOut() {
  */
 export async function requestPasswordReset(
   pervSatate: AuthResponse | null,
-  formData: FormData,
+  formData: FormData
 ): Promise<AuthResponse> {
   try {
     const rawFormData = Object.fromEntries(formData.entries())
@@ -224,7 +224,7 @@ export async function requestPasswordReset(
 
 export async function updatePassword(
   prevState: AuthResponse,
-  formData: FormData,
+  formData: FormData
 ): Promise<AuthResponse> {
   try {
     // Validate passwords

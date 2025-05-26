@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://task-master.app',
+    url: 'https://task-master-drab-delta.vercel.app/',
     title: 'Task Master - Efficient Task Management',
     description:
       'Streamline your workflow with Task Master - the intuitive task management application that helps you organize, prioritize, and track your projects efficiently.',

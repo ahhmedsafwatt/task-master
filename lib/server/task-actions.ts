@@ -7,7 +7,7 @@ import { revalidatePath } from 'next/cache'
 
 export async function createTask(
   prevStateOrParams: TaskResponse | null,
-  formData: FormData,
+  formData: FormData
 ): Promise<TaskResponse> {
   try {
     const supabase = await createSupabaseClient()

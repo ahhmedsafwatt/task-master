@@ -14,7 +14,7 @@ export default function BreadCrumbs({ className }: { className?: string }) {
             key={href}
             className={cn(
               'text-base capitalize md:text-xl',
-              active ? 'text-gray-900 dark:text-gray-100' : 'text-gray-500',
+              active ? 'text-gray-900 dark:text-gray-100' : 'text-gray-500'
             )}
           >
             <Link href={href}>{label}</Link>

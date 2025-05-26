@@ -24,7 +24,7 @@ export const ProjectsSearchDropDown = ({
   const [searchDropDown, setSearchDropDown] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedProjectId, setSelectedProjectId] = useState(
-    initialSelectedProjectId || '',
+    initialSelectedProjectId || ''
   )
 
   const dropDownRef = useRef<HTMLDivElement>(null)
@@ -33,7 +33,7 @@ export const ProjectsSearchDropDown = ({
   useEffect(() => {
     if (initialSelectedProjectId) {
       const initialProject = projects.find(
-        (project) => project.id === initialSelectedProjectId,
+        (project) => project.id === initialSelectedProjectId
       )
       if (initialProject) {
         setSearchQuery(initialProject.name)
@@ -46,9 +46,9 @@ export const ProjectsSearchDropDown = ({
       searchQuery.trim() === ''
         ? projects
         : projects.filter((project) =>
-            project.name?.toLowerCase().includes(searchQuery.toLowerCase()),
+            project.name?.toLowerCase().includes(searchQuery.toLowerCase())
           ),
-    [searchQuery, projects],
+    [searchQuery, projects]
   )
 
   // Handle input change to check if selected project name is modified
@@ -57,7 +57,7 @@ export const ProjectsSearchDropDown = ({
     setSearchQuery(newValue)
 
     const selectedProject = projects.find(
-      (project) => project.id === selectedProjectId,
+      (project) => project.id === selectedProjectId
     )
 
     // If we have a selected project and the input no longer matches it exactly
@@ -79,7 +79,7 @@ export const ProjectsSearchDropDown = ({
         // Reset to selected project name if one exists, otherwise clear
         if (selectedProjectId) {
           const selectedProject = projects.find(
-            (project) => project.id === selectedProjectId,
+            (project) => project.id === selectedProjectId
           )
           if (selectedProject) {
             setSearchQuery(selectedProject.name)
@@ -111,7 +111,7 @@ export const ProjectsSearchDropDown = ({
             className={cn(
               'h-8 w-full border-none ring-0 transition-colors focus-visible:border-none focus-visible:outline-none focus-visible:ring-0',
               searchDropDown && 'bg-accent rounded-b-none',
-              !disabled && 'hover:bg-accent/90',
+              !disabled && 'hover:bg-accent/90'
             )}
             value={searchQuery}
             onChange={handleInputChange}
@@ -131,7 +131,7 @@ export const ProjectsSearchDropDown = ({
               'bg-card absolute right-0 top-full z-10 max-h-40 w-full overflow-auto rounded-md rounded-t-none shadow-lg transition-all duration-75',
               searchDropDown
                 ? 'visible scale-100'
-                : 'pointer-events-none invisible opacity-0',
+                : 'pointer-events-none invisible opacity-0'
             )}
           >
             {projects.length > 0 ? (

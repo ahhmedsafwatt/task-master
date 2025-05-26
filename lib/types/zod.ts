@@ -103,7 +103,7 @@ export const TaskSchema = z
     {
       message: 'Start date must be before due date',
       path: ['start_date'],
-    },
+    }
   )
   .refine(
     (data) => {
@@ -116,7 +116,7 @@ export const TaskSchema = z
     {
       message: 'Project ID is required when task is not private',
       path: ['project_id'],
-    },
+    }
   )
 
 // Infer the type from the schema for TypeScript

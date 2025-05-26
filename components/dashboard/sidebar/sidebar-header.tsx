@@ -30,13 +30,9 @@ export function SidebarHeader({
         variant="ghost"
         size={'smIcon'}
         onClick={togglePin}
-        className="hover:bg-accent box-content cursor-pointer rounded-md p-1 transition-colors duration-300"
+        className="hover:bg-accent cursor-pointer rounded-md transition-colors duration-300"
       >
-        {isPinned ? (
-          <PanelLeftClose size={18} />
-        ) : (
-          <PanelRightClose size={18} />
-        )}
+        {isPinned ? <PanelLeftClose /> : <PanelRightClose />}
       </Button>
     </div>
   )

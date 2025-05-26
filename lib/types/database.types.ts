@@ -73,6 +73,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "notifications_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "notifications_related_project_id_fkey"
             columns: ["related_project_id"]
             isOneToOne: false
@@ -84,6 +91,13 @@ export type Database = {
             columns: ["related_task_id"]
             isOneToOne: false
             referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -142,6 +156,13 @@ export type Database = {
             referencedRelation: "projects"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "project_members_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       projects: {
@@ -151,7 +172,7 @@ export type Database = {
           description: string | null
           id: string
           name: string
-          project_covers: string | null
+          project_cover: string | null
           updated_at: string
         }
         Insert: {
@@ -160,7 +181,7 @@ export type Database = {
           description?: string | null
           id?: string
           name: string
-          project_covers?: string | null
+          project_cover?: string | null
           updated_at?: string
         }
         Update: {
@@ -169,7 +190,7 @@ export type Database = {
           description?: string | null
           id?: string
           name?: string
-          project_covers?: string | null
+          project_cover?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -206,6 +227,13 @@ export type Database = {
             referencedRelation: "tasks"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "task_assignees_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       tasks: {
@@ -218,6 +246,7 @@ export type Database = {
           markdown_content: string | null
           priority: Database["public"]["Enums"]["task_priority"] | null
           project_id: string | null
+          project_name: string | null
           start_date: string | null
           status: Database["public"]["Enums"]["task_status"] | null
           title: string
@@ -232,6 +261,7 @@ export type Database = {
           markdown_content?: string | null
           priority?: Database["public"]["Enums"]["task_priority"] | null
           project_id?: string | null
+          project_name?: string | null
           start_date?: string | null
           status?: Database["public"]["Enums"]["task_status"] | null
           title: string
@@ -246,12 +276,20 @@ export type Database = {
           markdown_content?: string | null
           priority?: Database["public"]["Enums"]["task_priority"] | null
           project_id?: string | null
+          project_name?: string | null
           start_date?: string | null
           status?: Database["public"]["Enums"]["task_status"] | null
           title?: string
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "tasks_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "tasks_project_id_fkey"
             columns: ["project_id"]
@@ -271,6 +309,10 @@ export type Database = {
         Returns: undefined
       }
       check_overdue_tasks: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      delete_old_notifications: {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
@@ -295,7 +337,7 @@ export type Database = {
         | "TASK_DUE_SOON"
         | "TASK_OVERDUE"
       roles: "VIEWER" | "MEMBER" | "ADMIN" | "OWNER"
-      task_priority: "LOW" | "MEDIUM" | "HIGH"
+      task_priority: "LOW" | "MEDIUM" | "HIGH" | "URGENT"
       task_status: "BACKLOG" | "IN_PROGRESS" | "COMPLETED"
     }
     CompositeTypes: {
@@ -423,7 +465,7 @@ export const Constants = {
         "TASK_OVERDUE",
       ],
       roles: ["VIEWER", "MEMBER", "ADMIN", "OWNER"],
-      task_priority: ["LOW", "MEDIUM", "HIGH"],
+      task_priority: ["LOW", "MEDIUM", "HIGH", "URGENT"],
       task_status: ["BACKLOG", "IN_PROGRESS", "COMPLETED"],
     },
   },

@@ -11,7 +11,7 @@ import { redirect } from 'next/navigation'
 export const UpdatePasswordComponet = () => {
   const [state, action, isPending] = useActionState<AuthResponse, FormData>(
     updatePassword,
-    { message: '', status: 'idle' },
+    { message: '', status: 'idle' }
   )
 
   useEffect(() => {

@@ -53,9 +53,9 @@ export function SidebarProjects({
               isActive={isActive}
               key={project.id + project.name}
               customIcon={
-                project.project_covers ? (
+                project.project_cover ? (
                   <Image
-                    src={project.project_covers}
+                    src={project.project_cover}
                     alt={project.name}
                     height={24}
                     width={24}

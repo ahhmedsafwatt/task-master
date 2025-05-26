@@ -61,7 +61,7 @@ export const TaskItem = ({ task }: { task: Tables<'tasks'> }) => {
 
   const statusColor = useMemo(
     () => getStatusColor(task.status as Enums<'task_status'>),
-    [task.status],
+    [task.status]
   )
 
   return (
@@ -93,7 +93,7 @@ export const TaskItem = ({ task }: { task: Tables<'tasks'> }) => {
               {task.due_date && (
                 <span
                   className={cn(
-                    remaining === 'overdue' && 'text-destructive font-medium',
+                    remaining === 'overdue' && 'text-destructive font-medium'
                   )}
                 >
                   Due {remaining}

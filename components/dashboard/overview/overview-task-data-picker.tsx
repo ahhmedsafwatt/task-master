@@ -32,7 +32,7 @@ export const DatePickerField = ({
           variant="outline"
           className={cn(
             'w-full justify-start text-left font-normal',
-            !date && 'text-muted-foreground',
+            !date && 'text-muted-foreground'
           )}
           aria-label={
             date
@@ -49,7 +49,7 @@ export const DatePickerField = ({
           selected={date ? new Date(date) : undefined}
           onSelect={(selectedDate) => {
             onSelect(
-              selectedDate instanceof Date ? formatISO(selectedDate) : null,
+              selectedDate instanceof Date ? formatISO(selectedDate) : null
             )
           }}
           initialFocus
