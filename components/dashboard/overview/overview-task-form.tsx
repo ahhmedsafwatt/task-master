@@ -22,6 +22,7 @@ import {
   CircleDashed,
   Loader,
   CircleCheck,
+  CircleAlert,
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -68,7 +69,9 @@ export const TaskForm = ({
       onSuccessAction()
     }
 
-    setProjects([])
+    setProjects([
+      { id: '0e9ddc55-b619-4439-a0f2-af366cc8d28a', name: 'movies' },
+    ])
     setUsers([])
 
     return () => {
@@ -110,8 +113,12 @@ export const TaskForm = ({
         <ProjectsSearchDropDown
           projects={projects as { id: string; name: string }[]}
           label="Project"
-          onProjectSelect={(value) => {
-            updateFormDataFields('project_id', value)
+          onProjectSelect={(field, value) => {
+            if (field === 'project_id') {
+              updateFormDataFields('project_id', value)
+            } else if (field === 'project_name') {
+              updateFormDataFields('project_name', value)
+            }
           }}
           placeholder="Search projects..."
           disabled={!!formData.is_private}
@@ -119,11 +126,16 @@ export const TaskForm = ({
             formData.project_id ? formData.project_id : undefined
           }
         />
-        {/* Hidden input for form submission */}
+        {/* Hidden inputs for form submission */}
         <input
           type="hidden"
-          name={'project_id'}
+          name="project_id"
           value={formData.project_id ?? ''}
+        />
+        <input
+          type="hidden"
+          name="project_name"
+          value={formData.project_name ?? ''}
         />
         {/* Priority and Status */}
         <Selections
@@ -136,6 +148,10 @@ export const TaskForm = ({
             {
               option: 'HIGH',
               icon: <Signal size={18} />,
+            },
+            {
+              option: 'URGENT',
+              icon: <CircleAlert size={18} />,
             },
           ]}
           updateFormData={(field, value) =>

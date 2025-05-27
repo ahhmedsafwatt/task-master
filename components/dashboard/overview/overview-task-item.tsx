@@ -61,7 +61,7 @@ export const TaskItem = ({ task }: { task: Tables<'tasks'> }) => {
 
   const statusColor = useMemo(
     () => getStatusColor(task.status as Enums<'task_status'>),
-    [task.status]
+    [task.status],
   )
 
   return (
@@ -73,9 +73,16 @@ export const TaskItem = ({ task }: { task: Tables<'tasks'> }) => {
       >
         <div>
           <h3 className="line-clamp-2 font-medium">{task.title}</h3>
-          <p className="text-muted-foreground truncate text-sm">
-            Project: {task.project_id}
-          </p>
+          <div className="text-muted-foreground truncate text-sm">
+            <span>Project: </span>
+            <Link
+              href={`/dashboard/projects/${task.project_id}`}
+              className="hover:text-primary-foreground transition-colors hover:underline"
+            >
+              {task.project_name}
+            </Link>
+          </div>
+
           <div className="mt-2 flex items-center gap-2">
             {task.status && (
               <div
@@ -93,7 +100,7 @@ export const TaskItem = ({ task }: { task: Tables<'tasks'> }) => {
               {task.due_date && (
                 <span
                   className={cn(
-                    remaining === 'overdue' && 'text-destructive font-medium'
+                    remaining === 'overdue' && 'text-destructive font-medium',
                   )}
                 >
                   Due {remaining}

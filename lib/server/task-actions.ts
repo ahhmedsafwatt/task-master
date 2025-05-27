@@ -31,6 +31,7 @@ export async function createTask(
       priority: (formData.get('priority') as string) || 'LOW',
       status: (formData.get('status') as string) || 'BACKLOG',
       project_id: (formData.get('project_id') as string) || null,
+      project_name: formData.get('project_name') as string || null,
       assignee_ids: (formData.getAll('assignee_ids') as string[]) || null,
       due_date: (formData.get('due_date') as string) || null,
       start_date: (formData.get('start_date') as string) || null,
@@ -52,7 +53,6 @@ export async function createTask(
     // Validation passed, use the parsed data (automatically converts to proper types)
     const validData = result.data
 
-    console.log('valid data', validData)
     // Check project access if a project_id is provided and user is not a member of the project
     if (validData.project_id) {
       try {
@@ -92,6 +92,8 @@ export async function createTask(
           start_date: validData.start_date,
           project_id: validData.project_id,
           markdown_content: validData.markdown_content,
+          project_name: validData.project_name
+          
         },
       ])
       .select('id')
@@ -105,7 +107,6 @@ export async function createTask(
     }
 
     const taskId = data?.[0]?.id
-    console.log('Task assignee:', validData.assignee_ids)
     // If we have an assignee and a task was created successfully, assign the user to the task
     if (
       validData.assignee_ids &&

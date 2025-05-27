@@ -1,4 +1,6 @@
 import { z } from 'zod'
+import { Enums } from './database.types'
+
 
 // Email validation schema
 export const emailSchema = z.object({
@@ -61,15 +63,18 @@ export const signupSchema = z.object({
 export type LoginFormData = z.infer<typeof loginSchema>
 export type SignupFormData = z.infer<typeof signupSchema>
 
+ 
+
 // Define Zod schema for task creation
 export const TaskSchema = z
   .object({
     title: z.string().min(1, 'Task title is required'),
     markdown_content: z.string().optional(),
     is_private: z.boolean().default(true),
-    priority: z.enum(['LOW', 'MEDIUM', 'HIGH']).default('LOW'),
-    status: z.enum(['BACKLOG', 'IN_PROGRESS', 'COMPLETED']).default('BACKLOG'),
+    priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'URGENT']).default('LOW'),
+    status: z.enum(['BACKLOG',  'IN_PROGRESS', 'COMPLETED']).default('BACKLOG'),
     project_id: z.string().nullable().optional(),
+    project_name: z.string().nullable().optional(),
     assignee_ids: z.array(z.string()).nullable(),
     due_date: z
       .string()
