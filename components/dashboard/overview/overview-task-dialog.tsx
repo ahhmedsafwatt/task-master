@@ -29,7 +29,23 @@ export const OverViewTasksDialog = () => {
   }
 
   return (
-    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+    <Dialog
+      open={openDialog}
+      onOpenChange={(open) => {
+        setOpenDialog(open)
+        if (!open) {
+          createTaskResponse.status = 'idle'
+          createTaskResponse.message = null
+          createTaskResponse.errors = undefined
+          setOpenDialog(false)
+        } else {
+          createTaskResponse.status = 'idle'
+          createTaskResponse.message = null
+          createTaskResponse.errors = undefined
+          setOpenDialog(true)
+        }
+      }}
+    >
       <DialogTrigger asChild>
         <TooltipProvider>
           <Tooltip>

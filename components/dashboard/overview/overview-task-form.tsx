@@ -25,6 +25,7 @@ import {
   CircleAlert,
 } from 'lucide-react'
 import Link from 'next/link'
+import { cn } from '@/lib/utils'
 
 // Task form component
 export const TaskForm = ({
@@ -69,14 +70,13 @@ export const TaskForm = ({
       onSuccessAction()
     }
 
-    setProjects([
-      { id: '0e9ddc55-b619-4439-a0f2-af366cc8d28a', name: 'movies' },
-    ])
+    setProjects([])
     setUsers([])
 
     return () => {
       createTaskResponse.status = 'idle'
       createTaskResponse.message = null
+      createTaskResponse.errors = undefined
     }
   }, [
     createTaskResponse.status,
@@ -98,9 +98,12 @@ export const TaskForm = ({
             id="task-title"
             name="title"
             placeholder="Task title"
-            className="text-2xl! h-14 text-pretty rounded-md border-0 p-2 font-bold shadow-none ring-0 selection:bg-[#373b67] placeholder:text-2xl focus-visible:ring-0"
+            className={cn(
+              'text-2xl! h-14 text-pretty rounded-md border-0 p-2 font-bold shadow-none ring-0 selection:bg-[#373b67] placeholder:text-2xl focus-visible:ring-0',
+              createTaskResponse.errors?.title &&
+                'placeholder:text-destructive animate-shake',
+            )}
             autoFocus
-            required
             value={formData.title ?? ''}
             onChange={(e) => updateFormDataFields('title', e.target.value)}
           />
@@ -152,7 +155,7 @@ export const TaskForm = ({
             },
           ]}
           updateFormData={(field, value) =>
-            updateFormDataFields(field as any, value)
+            updateFormDataFields(field as 'priority', value)
           }
         />
         <Selections
@@ -174,7 +177,7 @@ export const TaskForm = ({
             },
           ]}
           updateFormData={(field, value) =>
-            updateFormDataFields(field as any, value)
+            updateFormDataFields(field as 'status', value)
           }
         />
 
@@ -184,13 +187,19 @@ export const TaskForm = ({
           label="Assignees"
           placeholder="search user assign..."
           maxDisplayItems={3}
-          disabled={!!formData.is_private || formData.project_id === ''}
+          disabled={
+            !!formData.is_private ||
+            formData.project_id === '' ||
+            formData.project_id === null
+          }
           onItemSelect={(value) => updateFormDataFields('assignee_ids', value)}
         />
         {/* Hidden input for form submission - array of assignee IDs */}
-        {formData.assignee_ids.map((id) => (
-          <input type="hidden" key={id} name="assignee_ids" value={id} />
-        ))}
+        <input
+          type="hidden"
+          name="assignee_ids"
+          value={JSON.stringify(formData.assignee_ids)}
+        />
         {/* Start Date */}
         <TaskDatePickerField
           id="due_date"
@@ -250,7 +259,7 @@ export const TaskForm = ({
         {/* Hidden input for form submission */}
         <Button
           variant={'main'}
-          disabled={isPending || !formData.title}
+          disabled={isPending}
           className="w-28 text-white"
         >
           {isPending ? 'Creating...' : 'Create task'}

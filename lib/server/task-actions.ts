@@ -32,9 +32,35 @@ export async function createTask(
       status: (formData.get('status') as string) || 'BACKLOG',
       project_id: (formData.get('project_id') as string) || null,
       project_name: (formData.get('project_name') as string) || null,
-      assignee_ids: (formData.getAll('assignee_ids') as string[]) || null,
+      assignee_ids: JSON.parse(formData.get('assignee_ids') as string),
       due_date: (formData.get('due_date') as string) || null,
       end_date: (formData.get('end_date') as string) || null,
+    }
+
+
+    // Check project access if a project_id is provided and user is not a member of the project
+    if (rawData.project_id) {
+      try {
+        const { data: projectAccess } = await supabase
+          .from('project_members')
+          .select('role')
+          .eq('project_id', rawData.project_id)
+          .eq('user_id', user.id)
+          .single()
+
+        if (!projectAccess || projectAccess.role === 'VIEWER') {
+          return {
+            status: 'error',
+            message: 'You do not have access to create tasks in this project',
+          }
+        }
+      } catch (error) {
+        console.error('Error checking project access:', error)
+        return {
+          status: 'error',
+          message: 'Failed to check project access',
+        }
+      }
     }
 
     // Validate with Zod
@@ -53,30 +79,7 @@ export async function createTask(
     // Validation passed, use the parsed data (automatically converts to proper types)
     const validData = result.data
     console.log('Valid data:', validData)
-    // Check project access if a project_id is provided and user is not a member of the project
-    if (validData.project_id) {
-      try {
-        const { data: projectAccess } = await supabase
-          .from('project_members')
-          .select('role')
-          .eq('project_id', validData.project_id)
-          .eq('user_id', user.id)
-          .single()
 
-        if (!projectAccess || projectAccess.role === 'VIEWER') {
-          return {
-            status: 'error',
-            message: 'You do not have access to create tasks in this project',
-          }
-        }
-      } catch (error) {
-        console.error('Error checking project access:', error)
-        return {
-          status: 'error',
-          message: 'Failed to check project access',
-        }
-      }
-    }
 
     // Insert task
     const { data, error } = await supabase
