@@ -8,7 +8,10 @@ interface ProjectsSearchDropDownProps {
   projects: { id: string; name: string }[]
   label: string
   placeholder: string
-  onProjectSelect: (filed: string, value: string) => void
+  onProjectSelect: (update: {
+    project_id: string
+    project_name: string
+  }) => void
   disabled?: boolean
   initialSelectedProjectId?: string // Optional prop to set initial selected project
 }
@@ -67,8 +70,10 @@ export const ProjectsSearchDropDown = ({
       newValue !== selectedProject.name
     ) {
       setSelectedProjectId('')
-      onProjectSelect('project_id', '')
-      onProjectSelect('project_name', '')
+      onProjectSelect({
+        project_id: '',
+        project_name: '',
+      })
     }
   }
 
@@ -97,8 +102,10 @@ export const ProjectsSearchDropDown = ({
   const handleProjectSelect = (project: { id: string; name: string }) => {
     setSelectedProjectId(project.id)
     setSearchQuery(project.name)
-    onProjectSelect('project_id', project.id)
-    onProjectSelect('project_name', project.name)
+    onProjectSelect({
+      project_id: project.id,
+      project_name: project.name,
+    })
     setSearchDropDown(false)
   }
 

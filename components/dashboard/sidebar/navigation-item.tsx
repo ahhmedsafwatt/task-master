@@ -27,7 +27,7 @@ export function NavigationItem({
         {
           'bg-background text-primary-foreground font-semibold shadow':
             isActive,
-        }
+        },
       )}
       onClick={onClick}
     >

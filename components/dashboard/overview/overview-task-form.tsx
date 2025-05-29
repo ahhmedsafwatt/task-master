@@ -11,7 +11,7 @@ import { TaskResponse, userProfile } from '@/lib/types/types'
 import { Separator } from '@/components/ui/separator'
 import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
-import { DatePickerField } from './overview-task-data-picker'
+import { TaskDatePickerField } from './overview-task-date-picker'
 import { PrivateTaskCheckbox } from './overview-task-private'
 import { Selections } from './overview-task-selections'
 import {
@@ -113,12 +113,9 @@ export const TaskForm = ({
         <ProjectsSearchDropDown
           projects={projects as { id: string; name: string }[]}
           label="Project"
-          onProjectSelect={(field, value) => {
-            if (field === 'project_id') {
-              updateFormDataFields('project_id', value)
-            } else if (field === 'project_name') {
-              updateFormDataFields('project_name', value)
-            }
+          onProjectSelect={(update) => {
+            updateFormDataFields('project_id', update.project_id)
+            updateFormDataFields('project_name', update.project_name)
           }}
           placeholder="Search projects..."
           disabled={!!formData.is_private}
@@ -195,11 +192,25 @@ export const TaskForm = ({
           <input type="hidden" key={id} name="assignee_ids" value={id} />
         ))}
         {/* Start Date */}
-        <DatePickerField
+        <TaskDatePickerField
           id="due_date"
           label="Due Date"
-          date={formData.start_date || null}
-          onSelect={(date) => updateFormDataFields('start_date', date)}
+          date={formData.due_date || null}
+          onSelect={(update) => {
+            updateFormDataFields('due_date', update.due_date)
+            updateFormDataFields('end_date', update.end_date || null)
+          }}
+        />
+        {/* Hidden input for form submission */}
+        <input
+          type="hidden"
+          name={'due_date'}
+          value={formData.due_date ?? ''}
+        />
+        <input
+          type="hidden"
+          name={'end_date'}
+          value={formData.end_date ?? ''}
         />
       </div>
 

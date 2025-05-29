@@ -212,7 +212,7 @@ const BackgroundPlane = ({
       material.uniforms.u_time.value = clock.getElapsedTime()
       material.uniforms.u_resolution.value = new THREE.Vector2(
         size.width,
-        size.height
+        size.height,
       )
       material.uniforms.u_color1.value = new THREE.Color(primaryColor)
       material.uniforms.u_color2.value = new THREE.Color(secondaryColor)

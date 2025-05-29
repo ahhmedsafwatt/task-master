@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { cn } from '@/lib/utils'
 
 // Priority and Status selection component
 export const Selections = ({
@@ -23,11 +24,14 @@ export const Selections = ({
   updateFormData: (field: string, value: any) => void
 }) => {
   const [selectedValue, setSelectedValue] = useState<string>()
+  const [open, setOpen] = useState<boolean>()
 
   return (
     <div className="flex gap-2">
       <AttrbuiteLable label={label.toLowerCase()} icon={Icon} />
       <Select
+        open={open}
+        onOpenChange={setOpen}
         name={label.toLowerCase()}
         value={selectedValue || defaultValue}
         onValueChange={(value) => {
@@ -36,12 +40,15 @@ export const Selections = ({
         }}
       >
         <SelectTrigger
-          className="bg-secondary w-full border-none"
+          className={cn(
+            'hover:bg-accent dark:hover:bg-accent dark:focus-visible:bg-accent w-full border-none bg-transparent dark:bg-transparent',
+            open && 'bg-accent dark:bg-accent',
+          )}
           id={label.toLowerCase()}
         >
           <SelectValue placeholder={`Select ${label}`} />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="bg-card">
           {options.map((opt) => (
             <SelectItem key={opt.option} value={opt.option}>
               <span>{opt.icon}</span>

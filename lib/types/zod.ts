@@ -1,6 +1,4 @@
 import { z } from 'zod'
-import { Enums } from './database.types'
-
 
 // Email validation schema
 export const emailSchema = z.object({
@@ -63,8 +61,6 @@ export const signupSchema = z.object({
 export type LoginFormData = z.infer<typeof loginSchema>
 export type SignupFormData = z.infer<typeof signupSchema>
 
- 
-
 // Define Zod schema for task creation
 export const TaskSchema = z
   .object({
@@ -72,7 +68,7 @@ export const TaskSchema = z
     markdown_content: z.string().optional(),
     is_private: z.boolean().default(true),
     priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'URGENT']).default('LOW'),
-    status: z.enum(['BACKLOG',  'IN_PROGRESS', 'COMPLETED']).default('BACKLOG'),
+    status: z.enum(['BACKLOG', 'IN_PROGRESS', 'COMPLETED']).default('BACKLOG'),
     project_id: z.string().nullable().optional(),
     project_name: z.string().nullable().optional(),
     assignee_ids: z.array(z.string()).nullable(),
@@ -85,7 +81,7 @@ export const TaskSchema = z
       }, 'Invalid date format')
       .nullable()
       .optional(),
-    start_date: z
+    end_date: z
       .string()
       .refine((val) => {
         if (!val) return true
@@ -97,18 +93,18 @@ export const TaskSchema = z
   })
   .refine(
     (data) => {
-      // Custom validation: start_date should be before due_date if both exist
-      if (data.start_date && data.due_date) {
-        const startDate = new Date(data.start_date)
+      // Custom validation: end_date should be after due_date if both exist
+      if (data.end_date && data.due_date) {
+        const endDate = new Date(data.end_date)
         const dueDate = new Date(data.due_date)
-        return startDate <= dueDate
+        return endDate >= dueDate
       }
       return true
     },
     {
       message: 'Start date must be before due date',
-      path: ['start_date'],
-    }
+      path: ['end_date'],
+    },
   )
   .refine(
     (data) => {
@@ -121,7 +117,7 @@ export const TaskSchema = z
     {
       message: 'Project ID is required when task is not private',
       path: ['project_id'],
-    }
+    },
   )
 
 // Infer the type from the schema for TypeScript

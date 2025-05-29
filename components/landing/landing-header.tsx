@@ -73,7 +73,7 @@ export function LandingHeader() {
               {
                 'glass-morph shadow-[0px_5px_18px_rgba(204,_204,_204,_0.2)] dark:shadow-[0px_5px_18px_rgba(204,_204,_204,_0.1)]':
                   hasScrolled && !isMenuOpen,
-              }
+              },
             )}
           >
             <Logo
@@ -93,7 +93,7 @@ export function LandingHeader() {
                             {
                               'text-gray-300 hover:text-white':
                                 hasScrolled || isMenuOpen,
-                            }
+                            },
                           )}
                         >
                           <FlipingText initialText={title} />
@@ -115,7 +115,7 @@ export function LandingHeader() {
                         {
                           'text-gray-300 hover:text-white':
                             hasScrolled || isMenuOpen,
-                        }
+                        },
                       )}
                     >
                       {title}
@@ -183,7 +183,7 @@ export function LandingHeader() {
                 isMenuOpen={isMenuOpen}
                 toggleMenu={() => setIsMenuOpen((prev) => !prev)}
                 className={cn(
-                  'hover:border-accent-foreground/30 bg-background/30 hover:bg-background/10 py-5'
+                  'hover:border-accent-foreground/30 bg-background/30 hover:bg-background/10 py-5',
                 )}
               />
             </div>
@@ -193,7 +193,7 @@ export function LandingHeader() {
       <div
         className={cn(
           'bg-secondary fixed left-full top-0 z-30 flex h-screen w-screen flex-col px-3 py-2 pb-6 pt-28 transition-all duration-500 ease-in-out sm:px-8 lg:hidden',
-          { 'left-0': isMenuOpen }
+          { 'left-0': isMenuOpen },
         )}
       >
         <ul className="mb-auto flex flex-col justify-center">

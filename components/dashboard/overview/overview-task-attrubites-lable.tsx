@@ -16,7 +16,7 @@ export const AttrbuiteLable = ({
       htmlFor={label}
       className={cn(
         'text-secondary-foreground hover:bg-accent hover:text-foreground relative mr-2 flex w-36 items-center gap-1.5 text-nowrap rounded-md px-3 py-1.5 transition-colors',
-        className
+        className,
       )}
     >
       <div>{icon}</div>

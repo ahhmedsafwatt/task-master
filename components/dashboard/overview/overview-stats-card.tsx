@@ -30,7 +30,7 @@ export const StatsCard = ({ title, description, trend }: StatsCardProps) => {
                 <span
                   className={cn(
                     'justify-center, flex items-center',
-                    trend.isPositive ? 'text-success' : 'text-destructive'
+                    trend.isPositive ? 'text-success' : 'text-destructive',
                   )}
                 >
                   <span> {trend.value}</span>

@@ -66,7 +66,7 @@ export function AppSidebar({ projects }: { projects: Tables<'projects'>[] }) {
         className={cn(
           'z-50 h-screen transition-all duration-300 ease-in-out',
           isPinned && !isMobile ? 'w-60' : 'w-0',
-          isMobile && 'fixed'
+          isMobile && 'fixed',
         )}
         onMouseEnter={handleNavMouseEnter}
         onMouseLeave={handleNavMouseLeave}
@@ -81,7 +81,7 @@ export function AppSidebar({ projects }: { projects: Tables<'projects'>[] }) {
               ? 'left-0 m-2 h-[calc(100%-1rem)] rounded-md border shadow-2xl'
               : !isNavVisible && '-left-60',
             // Fixed position for mobile
-            isMobile && isPinned && 'fixed left-0'
+            isMobile && isPinned && 'fixed left-0',
           )}
         >
           {/* Logo at the top */}

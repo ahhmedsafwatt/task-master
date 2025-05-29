@@ -10,7 +10,7 @@ export const DashboardHeader = () => {
   return (
     <div
       className={cn(
-        'bg-background sticky top-0 z-30 flex h-14 w-full items-center justify-between border-b px-3 py-2 shadow-sm md:px-8'
+        'bg-background sticky top-0 z-30 flex h-14 w-full items-center justify-between border-b px-3 py-2 shadow-sm md:px-8',
       )}
     >
       <BreadCrumbs className="ml-10 md:ml-0" />

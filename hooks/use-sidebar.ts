@@ -63,11 +63,11 @@ export function useSidebar({ initialPinned = true }: UseSidebarOptions = {}) {
   // Handle mouse enter/leave for nav
   const handleNavMouseEnter = useCallback(
     () => !isMobile && !isPinned && setIsNavHovered(true),
-    [isPinned, isMobile]
+    [isPinned, isMobile],
   )
   const handleNavMouseLeave = useCallback(
     () => !isMobile && !isPinned && setIsNavHovered(false),
-    [isMobile, isPinned]
+    [isMobile, isPinned],
   )
 
   // Close nav on mobile

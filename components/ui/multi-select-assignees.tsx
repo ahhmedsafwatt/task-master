@@ -37,15 +37,17 @@ export function MultiSelectAssignees({
     return searchQuery.trim() === ''
       ? users.filter(
           (user) =>
-            !selectedUsers.some((selectedUser) => selectedUser.id === user.id)
+            !selectedUsers.some((selectedUser) => selectedUser.id === user.id),
         )
       : users
           .filter(
             (user) =>
-              !selectedUsers.some((selectedUser) => selectedUser.id === user.id)
+              !selectedUsers.some(
+                (selectedUser) => selectedUser.id === user.id,
+              ),
           )
           .filter((user) =>
-            user.username?.toLowerCase().includes(searchQuery.toLowerCase())
+            user.username?.toLowerCase().includes(searchQuery.toLowerCase()),
           )
   }, [searchQuery, users, selectedUsers])
 
@@ -104,7 +106,7 @@ export function MultiSelectAssignees({
         className={cn(
           'hover:bg-accent/90 relative flex w-full flex-nowrap items-center gap-1 rounded-md px-2.5 text-sm transition-colors',
           searchDropDown && 'bg-accent rounded-b-none',
-          disabled && 'cursor-not-allowed opacity-50'
+          disabled && 'cursor-not-allowed opacity-50',
         )}
         onClick={disabled ? undefined : handleContainerClick}
       >
@@ -171,7 +173,7 @@ export function MultiSelectAssignees({
             'bg-card absolute right-0 top-full z-10 max-h-40 w-full overflow-auto rounded-md rounded-t-none shadow-lg transition-all duration-75',
             searchDropDown && !disabled
               ? 'visible scale-100'
-              : 'pointer-events-none invisible opacity-0'
+              : 'pointer-events-none invisible opacity-0',
           )}
         >
           <div className="text-muted-foreground border-b px-3 py-1.5 text-xs">

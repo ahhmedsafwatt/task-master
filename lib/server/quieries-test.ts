@@ -22,7 +22,7 @@ export const createTask = async ({
   status = 'BACKLOG',
   priority = 'LOW',
   due_date,
-  start_date,
+  end_date,
 }: createTaskprops) => {
   if (!user) return { data: null, error: new Error('User not provided') }
 
@@ -37,7 +37,7 @@ export const createTask = async ({
         status,
         priority,
         due_date,
-        start_date,
+        end_date,
         project_id,
       },
     ])
@@ -58,7 +58,7 @@ export const updateTask = async ({
   status = 'BACKLOG',
   priority = 'LOW',
   due_date,
-  start_date,
+  end_date,
 }: Omit<updateTaskprops, 'creator_id'>) => {
   if (!user || !id) return { data: null, error: new Error('User Not provided') }
 
@@ -71,7 +71,7 @@ export const updateTask = async ({
       status,
       priority,
       due_date,
-      start_date,
+      end_date,
       updated_at: new Date().toISOString(),
     })
     .eq('id', id)

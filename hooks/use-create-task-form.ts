@@ -17,12 +17,12 @@ export function useCreateTaskForm() {
     status: 'BACKLOG',
     creator_id: '',
     due_date: null,
-    start_date: null,
+    end_date: null,
   })
 
   const updateFormDataFields = <K extends keyof createTaskFormData>(
     field: K,
-    value: createTaskFormData[K]
+    value: createTaskFormData[K],
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
@@ -39,7 +39,7 @@ export function useCreateTaskForm() {
       status: 'BACKLOG',
       creator_id: '',
       due_date: null,
-      start_date: null,
+      end_date: null,
     })
   }
 

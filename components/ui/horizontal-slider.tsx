@@ -84,7 +84,7 @@ export default function HorizontalSlider({
       {showShadows && showLeftShadow && (
         <div
           className={cn(
-            `pointer-events-none absolute -left-8 bottom-0 top-0 z-10 bg-gradient-to-r from-black/20 to-transparent`
+            `pointer-events-none absolute -left-8 bottom-0 top-0 z-10 bg-gradient-to-r from-black/20 to-transparent`,
           )}
           style={{ width: shadowSize }}
           aria-hidden="true"
@@ -97,7 +97,7 @@ export default function HorizontalSlider({
         className={cn(
           'flex h-fit gap-4 overflow-x-auto',
           isDragging ? 'select-none' : '',
-          className
+          className,
         )}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}

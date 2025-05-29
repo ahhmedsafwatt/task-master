@@ -241,13 +241,13 @@ export type Database = {
           created_at: string
           creator_id: string
           due_date: string | null
+          end_date: string | null
           id: string
           is_private: boolean | null
           markdown_content: string | null
           priority: Database["public"]["Enums"]["task_priority"] | null
           project_id: string | null
           project_name: string | null
-          start_date: string | null
           status: Database["public"]["Enums"]["task_status"] | null
           title: string
           updated_at: string
@@ -256,13 +256,13 @@ export type Database = {
           created_at?: string
           creator_id: string
           due_date?: string | null
+          end_date?: string | null
           id?: string
           is_private?: boolean | null
           markdown_content?: string | null
           priority?: Database["public"]["Enums"]["task_priority"] | null
           project_id?: string | null
           project_name?: string | null
-          start_date?: string | null
           status?: Database["public"]["Enums"]["task_status"] | null
           title: string
           updated_at?: string
@@ -271,13 +271,13 @@ export type Database = {
           created_at?: string
           creator_id?: string
           due_date?: string | null
+          end_date?: string | null
           id?: string
           is_private?: boolean | null
           markdown_content?: string | null
           priority?: Database["public"]["Enums"]["task_priority"] | null
           project_id?: string | null
           project_name?: string | null
-          start_date?: string | null
           status?: Database["public"]["Enums"]["task_status"] | null
           title?: string
           updated_at?: string

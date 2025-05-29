@@ -40,7 +40,7 @@ export const Logo = ({
       <div
         className={cn(
           'font-cabinet text-base font-extrabold tracking-wide sm:text-lg',
-          textClassName
+          textClassName,
         )}
       >
         TASKMASTER

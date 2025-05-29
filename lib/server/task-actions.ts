@@ -7,7 +7,7 @@ import { revalidatePath } from 'next/cache'
 
 export async function createTask(
   prevStateOrParams: TaskResponse | null,
-  formData: FormData
+  formData: FormData,
 ): Promise<TaskResponse> {
   try {
     const supabase = await createSupabaseClient()
@@ -31,10 +31,10 @@ export async function createTask(
       priority: (formData.get('priority') as string) || 'LOW',
       status: (formData.get('status') as string) || 'BACKLOG',
       project_id: (formData.get('project_id') as string) || null,
-      project_name: formData.get('project_name') as string || null,
+      project_name: (formData.get('project_name') as string) || null,
       assignee_ids: (formData.getAll('assignee_ids') as string[]) || null,
       due_date: (formData.get('due_date') as string) || null,
-      start_date: (formData.get('start_date') as string) || null,
+      end_date: (formData.get('end_date') as string) || null,
     }
 
     // Validate with Zod
@@ -52,7 +52,7 @@ export async function createTask(
 
     // Validation passed, use the parsed data (automatically converts to proper types)
     const validData = result.data
-
+    console.log('Valid data:', validData)
     // Check project access if a project_id is provided and user is not a member of the project
     if (validData.project_id) {
       try {
@@ -89,11 +89,10 @@ export async function createTask(
           status: validData.status,
           priority: validData.priority,
           due_date: validData.due_date,
-          start_date: validData.start_date,
+          end_date: validData.end_date,
           project_id: validData.project_id,
           markdown_content: validData.markdown_content,
-          project_name: validData.project_name
-          
+          project_name: validData.project_name,
         },
       ])
       .select('id')

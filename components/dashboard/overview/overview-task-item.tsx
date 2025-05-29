@@ -74,13 +74,7 @@ export const TaskItem = ({ task }: { task: Tables<'tasks'> }) => {
         <div>
           <h3 className="line-clamp-2 font-medium">{task.title}</h3>
           <div className="text-muted-foreground truncate text-sm">
-            <span>Project: </span>
-            <Link
-              href={`/dashboard/projects/${task.project_id}`}
-              className="hover:text-primary-foreground transition-colors hover:underline"
-            >
-              {task.project_name}
-            </Link>
+            Project: {task.project_name}
           </div>
 
           <div className="mt-2 flex items-center gap-2">
@@ -91,12 +85,10 @@ export const TaskItem = ({ task }: { task: Tables<'tasks'> }) => {
               />
             )}
             <div className="text-muted-foreground flex items-center gap-1 text-xs">
-              {task.start_date && (
-                <span>
-                  Starts {format(new Date(task.start_date), 'dd MMM')}
-                </span>
+              {task.due_date && (
+                <span>Starts {format(new Date(task.due_date), 'dd MMM')}</span>
               )}
-              {task.due_date && task.start_date && <span>•</span>}
+              {task.due_date && task.due_date && <span>•</span>}
               {task.due_date && (
                 <span
                   className={cn(

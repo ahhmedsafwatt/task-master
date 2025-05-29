@@ -43,6 +43,7 @@ create table public.projects (
   id UUID primary key default gen_random_uuid (), -- Unique project ID generated automatically
   name TEXT not null, -- Name of the project (required)
   description TEXT, -- Optional project description
+  project_cover text,
   creator_id UUID references public.profiles (id) on delete CASCADE not null, -- References the profile that created the project
   created_at TIMESTAMPTZ default NOW() not null, -- Time of project creation
   updated_at TIMESTAMPTZ default NOW() not null -- Time of last update
@@ -63,7 +64,7 @@ create table public.tasks (
   markdown_content text,
   priority task_priority default 'LOW', -- Task priority using our custom enum
   status task_status default 'BACKLOG', -- Task status using our custom enum
-  start_date timestamp, -- Optional start date
+  end_date timestamp, -- Optional start date
   due_date timestamp, -- Optional due date for task completion
   created_at timestamp with time zone default current_timestamp not null, -- Timestamp when the task was created
   updated_at timestamp with time zone default current_timestamp not null -- Timestamp when the task was last updated
