@@ -6,8 +6,8 @@ import { ProjectsSearchDropDown } from '@/components/ui/project-search-dropdown'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { useCreateTaskForm } from '@/hooks/use-create-task-form'
-import { Enums, Tables } from '@/lib/types/database.types'
-import { TaskResponse, userProfile } from '@/lib/types/types'
+import { Enums } from '@/lib/types/database.types'
+import { Projects, TaskResponse, userProfile } from '@/lib/types/types'
 import { Separator } from '@/components/ui/separator'
 import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
@@ -26,6 +26,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import { getProjectMembers, getProjects } from '@/lib/server/project-actions'
 
 // Task form component
 export const TaskForm = ({
@@ -42,22 +43,71 @@ export const TaskForm = ({
   const { formData, updateFormDataFields, resetFormData } = useCreateTaskForm()
 
   const [users, setUsers] = useState<userProfile[]>([])
-  const [projects, setProjects] = useState<Partial<Tables<'projects'>>[]>([])
+  const [projects, setProjects] = useState<Projects[]>([])
+  const [isLoadingProjects, setIsLoadingProjects] = useState(true)
+
+  // Fetch projects on component mount
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const { data, error } = await getProjects()
+        if (error) {
+          toast.error('Failed to fetch projects')
+          return
+        }
+        if (data) {
+          setProjects([...data])
+        }
+      } catch (error) {
+        console.error('Error fetching projects:', error)
+        toast.error('Failed to fetch projects')
+      } finally {
+        setIsLoadingProjects(false)
+      }
+    }
+
+    fetchProjects()
+  }, [])
+
+  // Fetch project members when a project is selected
+  useEffect(() => {
+    const fetchProjectMembers = async () => {
+      if (!formData.project_id) {
+        setUsers([])
+        return
+      }
+
+      try {
+        const { data, error } = await getProjectMembers(formData.project_id)
+        if (error) {
+          toast.error('Failed to fetch project members')
+          return
+        }
+        if (data) {
+          setUsers([...data])
+        }
+      } catch (error) {
+        console.error('Error fetching project members:', error)
+        toast.error('Failed to fetch project members')
+      }
+    }
+
+    fetchProjectMembers()
+  }, [formData.project_id])
 
   // Handle server action responses
   useEffect(() => {
-    if (createTaskResponse.status === 'error' && createTaskResponse.message) {
-      toast.error(createTaskResponse.message)
+    const { message, status, data } = createTaskResponse
+
+    if (status === 'error' && message) {
+      toast.error(message)
     }
 
-    if (
-      createTaskResponse.status === 'created' &&
-      createTaskResponse.data?.taskId
-    ) {
+    if (status === 'created' && data?.taskId) {
       toast.success('Task created successfully!', {
         description: (
           <Link
-            href={`/dashboard/${createTaskResponse.data.taskId}`}
+            href={`/dashboard/${data.taskId}`}
             className="text-blue-500 underline hover:text-blue-600"
           >
             View task
@@ -65,11 +115,10 @@ export const TaskForm = ({
         ),
       })
 
-      // Only reset form on successful creation
       resetFormData()
       onSuccessAction()
     }
-
+    // for featuer me you might want to delete these.
     setProjects([])
     setUsers([])
 
@@ -78,12 +127,7 @@ export const TaskForm = ({
       createTaskResponse.message = null
       createTaskResponse.errors = undefined
     }
-  }, [
-    createTaskResponse.status,
-    createTaskResponse.message,
-    createTaskResponse.data?.taskId,
-    onSuccessAction,
-  ])
+  }, [createTaskResponse, onSuccessAction])
 
   return (
     <form
@@ -114,7 +158,7 @@ export const TaskForm = ({
       <div className="flex flex-col gap-3.5">
         {/* Project Selection */}
         <ProjectsSearchDropDown
-          projects={projects as { id: string; name: string }[]}
+          projects={projects}
           label="Project"
           onProjectSelect={(update) => {
             updateFormDataFields('project_id', update.project_id)
@@ -125,8 +169,9 @@ export const TaskForm = ({
           initialSelectedProjectId={
             formData.project_id ? formData.project_id : undefined
           }
+          isLoading={isLoadingProjects}
         />
-        {/* Hidden inputs for form submission */}
+
         <input
           type="hidden"
           name="project_id"
@@ -181,7 +226,6 @@ export const TaskForm = ({
           }
         />
 
-        {/* Assignees Selection - Replace single assignee with multiple assignees */}
         <MultiSelectAssignees
           users={users}
           label="Assignees"
@@ -194,13 +238,12 @@ export const TaskForm = ({
           }
           onItemSelect={(value) => updateFormDataFields('assignee_ids', value)}
         />
-        {/* Hidden input for form submission - array of assignee IDs */}
+
         <input
           type="hidden"
           name="assignee_ids"
           value={JSON.stringify(formData.assignee_ids)}
         />
-        {/* Start Date */}
         <TaskDatePickerField
           id="due_date"
           label="Due Date"
@@ -236,7 +279,6 @@ export const TaskForm = ({
 
       <Separator className="my-4" />
 
-      {/* Submit Button */}
       <div className="flex items-center justify-end">
         {/* Private Task Checkbox */}
         <PrivateTaskCheckbox
@@ -256,7 +298,7 @@ export const TaskForm = ({
           name="is_private"
           value={formData.is_private ? 'true' : 'false'}
         />
-        {/* Hidden input for form submission */}
+
         <Button
           variant={'main'}
           disabled={isPending}

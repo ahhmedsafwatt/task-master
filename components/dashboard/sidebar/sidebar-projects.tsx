@@ -10,11 +10,11 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { Button } from '@/components/ui/button'
-import { Tables } from '@/lib/types/database.types'
+import { Projects } from '@/lib/types/types'
 
 interface SidebarProjectsProps {
   onItemClick?: () => void
-  projects: Tables<'projects'>[]
+  projects: Projects[]
 }
 
 export function SidebarProjects({
@@ -44,7 +44,7 @@ export function SidebarProjects({
         </TooltipProvider>
       </div>
       <div className="space-y-1.5">
-        {projects.map((project: Tables<'projects'>) => {
+        {projects.map((project: Projects) => {
           const isActive = pathname === `/dashboard/projects/${project.name}`
           return (
             <NavigationItem

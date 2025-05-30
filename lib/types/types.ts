@@ -1,4 +1,4 @@
-import { TablesInsert } from '@/lib/types/database.types'
+import { Tables } from '@/lib/types/database.types'
 import { ReactNode } from 'react'
 
 export interface AuthResponse {
@@ -17,12 +17,7 @@ export interface TaskResponse {
   }
 }
 
-export interface userProfile {
-  id?: string
-  email: string
-  avatar_url: string | null
-  username: string | null
-}
+export type userProfile = Tables<'profiles'>
 
 export interface NavItem {
   title: string
@@ -30,6 +25,4 @@ export interface NavItem {
   icon: ReactNode
 }
 
-export interface createTaskprops extends TablesInsert<'tasks'> {
-  userProfile: userProfile | null
-}
+export type Projects = Tables<'projects'>

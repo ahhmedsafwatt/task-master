@@ -1,5 +1,5 @@
 import { TablesInsert } from '@/lib/types/database.types'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 interface createTaskFormData extends TablesInsert<'tasks'> {
   assignee_ids: string[]
@@ -21,21 +21,22 @@ const defaultFormData: createTaskFormData = {
   end_date: null,
 }
 
-export function useCreateTaskForm() {
-  const [formData, setFormData] = useState<createTaskFormData>(() => {
-    if (typeof window !== 'undefined') {
-      const savedData = localStorage.getItem(STORAGE_KEY)
-      if (savedData) {
-        try {
-          return JSON.parse(savedData)
-        } catch (e) {
-          console.error('Failed to parse saved form data:', e)
-        }
-      }
-    }
-    // Return default values if no saved data exists
+const loadFormDataFromStorage = (): createTaskFormData => {
+  if (typeof window === 'undefined') return defaultFormData
+
+  try {
+    const savedData = localStorage.getItem(STORAGE_KEY)
+    return savedData ? JSON.parse(savedData) : defaultFormData
+  } catch (error) {
+    console.error('Failed to parse saved form data:', error)
     return defaultFormData
-  })
+  }
+}
+
+export function useCreateTaskForm() {
+  const [formData, setFormData] = useState<createTaskFormData>(
+    loadFormDataFromStorage,
+  )
 
   // Save form data to localStorage whenever it changes
   useEffect(() => {
@@ -44,20 +45,23 @@ export function useCreateTaskForm() {
     }
   }, [formData])
 
-  const updateFormDataFields = <K extends keyof createTaskFormData>(
-    field: K,
-    value: createTaskFormData[K],
-  ) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
-  }
+  const updateFormDataFields = useCallback(
+    <K extends keyof createTaskFormData>(
+      field: K,
+      value: createTaskFormData[K],
+    ) => {
+      setFormData((prev) => ({ ...prev, [field]: value }))
+    },
+    [],
+  )
 
-  const resetFormData = () => {
+  const resetFormData = useCallback(() => {
     setFormData(defaultFormData)
     // Also clear localStorage when form is reset
     if (typeof window !== 'undefined') {
       localStorage.removeItem(STORAGE_KEY)
     }
-  }
+  }, [defaultFormData])
 
   return {
     formData,

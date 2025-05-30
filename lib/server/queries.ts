@@ -86,6 +86,7 @@ export const getTasks = async (limit = 4) => {
       .select()
       .order('created_at', { ascending: false })
       .limit(limit)
+
     if (error) {
       console.error('Supabase query error:', error)
       return { data: null, error }

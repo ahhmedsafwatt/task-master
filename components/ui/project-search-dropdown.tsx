@@ -2,10 +2,11 @@ import { useMemo, useRef, useState, useEffect } from 'react'
 import { Input } from './input'
 import { cn } from '@/lib/utils'
 import { AttrbuiteLable } from '../dashboard/overview/overview-task-attrubites-lable'
-import { Box } from 'lucide-react'
+import { Box, Loader2 } from 'lucide-react'
+import { Projects } from '@/lib/types/types'
 
 interface ProjectsSearchDropDownProps {
-  projects: { id: string; name: string }[]
+  projects: Projects[]
   label: string
   placeholder: string
   onProjectSelect: (update: {
@@ -14,6 +15,7 @@ interface ProjectsSearchDropDownProps {
   }) => void
   disabled?: boolean
   initialSelectedProjectId?: string // Optional prop to set initial selected project
+  isLoading?: boolean
 }
 
 export const ProjectsSearchDropDown = ({
@@ -23,6 +25,7 @@ export const ProjectsSearchDropDown = ({
   onProjectSelect,
   disabled,
   initialSelectedProjectId,
+  isLoading = false,
 }: ProjectsSearchDropDownProps) => {
   const [searchDropDown, setSearchDropDown] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
@@ -77,6 +80,16 @@ export const ProjectsSearchDropDown = ({
     }
   }
 
+  const handleProjectSelect = (project: Projects) => {
+    setSelectedProjectId(project.id)
+    setSearchQuery(project.name)
+    onProjectSelect({
+      project_id: project.id,
+      project_name: project.name,
+    })
+    setSearchDropDown(false)
+  }
+
   const handleInputBlur = () => {
     setTimeout(() => {
       if (!dropDownRef.current?.contains(document.activeElement)) {
@@ -98,40 +111,32 @@ export const ProjectsSearchDropDown = ({
     }, 150)
   }
 
-  // Handle project selection
-  const handleProjectSelect = (project: { id: string; name: string }) => {
-    setSelectedProjectId(project.id)
-    setSearchQuery(project.name)
-    onProjectSelect({
-      project_id: project.id,
-      project_name: project.name,
-    })
-    setSearchDropDown(false)
-  }
-
   return (
-    <div>
-      <div className="relative flex items-center">
-        <AttrbuiteLable label={label} icon={<Box size={18} />} />
-        <div className="relative w-full">
+    <div className="flex">
+      <AttrbuiteLable label={label} icon={<Box size={18} />} />
+      <div className="relative flex-1">
+        <div className="relative">
           <Input
-            id={label}
-            placeholder={disabled ? `Task is private` : placeholder}
-            className={cn(
-              'h-8 w-full border-none ring-0 transition-colors focus-visible:border-none focus-visible:outline-none focus-visible:ring-0',
-              searchDropDown && 'bg-accent rounded-b-none',
-              !disabled && 'hover:bg-accent/90',
-            )}
+            type="text"
+            id={label.toLowerCase()}
+            name={label.toLowerCase()}
+            placeholder={placeholder}
             value={searchQuery}
             onChange={handleInputChange}
             onFocus={() => setSearchDropDown(true)}
             onBlur={handleInputBlur}
-            autoComplete="off"
-            disabled={disabled}
-            aria-expanded={searchDropDown}
-            aria-haspopup={searchDropDown ? 'listbox' : undefined}
-            aria-controls={searchDropDown ? `${label}-listbox` : undefined}
+            onClick={() => setSearchDropDown(true)}
+            disabled={disabled || isLoading}
+            className={cn(
+              'h-8 w-full border-none ring-0 transition-colors focus-visible:border-none focus-visible:outline-none focus-visible:ring-0',
+              searchDropDown && 'bg-accent rounded-b-none',
+            )}
           />
+          {isLoading && (
+            <div className="absolute right-2 top-1/2 -translate-y-1/2">
+              <Loader2 className="h-4 w-4 animate-spin" />
+            </div>
+          )}
           <div
             ref={dropDownRef}
             id={`${label}-listbox`}
@@ -143,7 +148,12 @@ export const ProjectsSearchDropDown = ({
                 : 'pointer-events-none invisible opacity-0',
             )}
           >
-            {projects.length > 0 ? (
+            {isLoading ? (
+              <div className="text-muted-foreground flex h-20 items-center justify-center text-sm">
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <span>Loading projects...</span>
+              </div>
+            ) : projects.length > 0 ? (
               filteredProjects.map((project) => (
                 <div
                   tabIndex={0}
@@ -168,7 +178,7 @@ export const ProjectsSearchDropDown = ({
                 <span>No projects found</span>
               </div>
             )}
-          </div>{' '}
+          </div>
         </div>
       </div>
     </div>

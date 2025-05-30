@@ -3,18 +3,15 @@ import { cn } from '@/lib/utils'
 import { useRef } from 'react'
 import { Separator } from '@/components/ui/separator'
 import { useSidebar } from '@/hooks/use-sidebar'
-
 import { SidebarNavigation } from './sidebar-navigation'
 import { SidebarProjects } from './sidebar-projects'
-
 import { MenuIcon } from '@/components/ui/menu-icon'
-
 import { PanelLeftClose, PanelRightClose } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { SidebarHeader } from './sidebar-header'
-import { Tables } from '@/lib/types/database.types'
+import { Projects } from '@/lib/types/types'
 
-export function AppSidebar({ projects }: { projects: Tables<'projects'>[] }) {
+export function AppSidebar({ projects }: { projects: Projects[] }) {
   // Use our custom sidebar hook
   const {
     isPinned,

@@ -60,7 +60,7 @@ create table public.tasks (
   is_private boolean default true, -- Whether the task is private (default is public)
   creator_id uuid references public.profiles (id) not null, -- References the profile that created the task
   project_id uuid references public.projects (id) on delete cascade, -- Optional association with a project; deletion cascades
-  project_name text,
+  project_name text not null,
   markdown_content text,
   priority task_priority default 'LOW', -- Task priority using our custom enum
   status task_status default 'BACKLOG', -- Task status using our custom enum
