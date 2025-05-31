@@ -1,4 +1,4 @@
-import { Tables } from '@/lib/types/database.types'
+import { Tables, TablesInsert } from '@/lib/types/database.types'
 import { ReactNode } from 'react'
 
 export interface AuthResponse {
@@ -26,3 +26,7 @@ export interface NavItem {
 }
 
 export type Projects = Tables<'projects'>
+
+export interface createTaskFormData extends TablesInsert<'tasks'> {
+  assignee_ids: string[]
+}

@@ -27,7 +27,6 @@ export async function getProjects(): Promise<{
       .select('projects(*)')
       .eq('user_id', user.id)
       .neq('role', 'VIEWER')
-    console.log('Fetched projects:', projects)
 
     if (projectsError) {
       console.error('Error fetching projects:', projectsError)
@@ -78,7 +77,7 @@ export async function getProjectMembers(projectId: string): Promise<{
       .select('profiles(*)')
       .eq('project_id', projectId)
       .neq('role', 'VIEWER')
-    console.log('Fetched project members:', members)
+
     if (membersError) {
       console.error('Error fetching project members:', membersError)
       return {

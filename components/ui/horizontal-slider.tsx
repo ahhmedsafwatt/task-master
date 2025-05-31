@@ -65,9 +65,6 @@ export default function HorizontalSlider({
     const x = e.pageX - sliderRef.current.offsetLeft
     const walk = x - startX
     sliderRef.current.scrollLeft = scrollLeft - walk
-    console.log(scrollLeft, walk)
-    console.log(scrollLeft - walk)
-    console.log(startX)
   }
 
   const handleMouseUp = () => {

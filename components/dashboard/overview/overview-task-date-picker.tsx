@@ -65,7 +65,7 @@ export const TaskDatePickerField = ({
                 : 'Pick a date'}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" sideOffset={-50}>
+        <PopoverContent className="w-auto p-0" sideOffset={-140}>
           {isRange ? (
             <Calendar
               mode="range"

@@ -37,7 +37,6 @@ export async function createTask(
       end_date: (formData.get('end_date') as string) || null,
     }
 
-
     // Check project access if a project_id is provided and user is not a member of the project
     if (rawData.project_id) {
       try {
@@ -68,7 +67,7 @@ export async function createTask(
 
     // If validation fails, return errors
     if (!result.success) {
-      console.log('Validation failed:', result.error.format())
+      console.error('Validation failed:', result.error.format())
       return {
         status: 'error',
         message: result.error.errors[0]?.message || 'Invalid input data',
@@ -78,8 +77,6 @@ export async function createTask(
 
     // Validation passed, use the parsed data (automatically converts to proper types)
     const validData = result.data
-    console.log('Valid data:', validData)
-
 
     // Insert task
     const { data, error } = await supabase

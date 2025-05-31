@@ -104,7 +104,7 @@ export function MultiSelectAssignees({
       <div
         ref={containerRef}
         className={cn(
-          'hover:bg-accent/90 relative flex w-full flex-nowrap items-center gap-1 rounded-md px-2.5 text-sm transition-colors',
+          'hover:bg-accent/90 relative flex w-full flex-wrap items-center gap-1 rounded-md px-1.5 text-sm transition-colors md:px-2.5',
           searchDropDown && 'bg-accent rounded-b-none',
           disabled && 'cursor-not-allowed opacity-50',
         )}
@@ -153,7 +153,7 @@ export function MultiSelectAssignees({
                 ? ''
                 : placeholder
           }
-          className="min-w-[120px] flex-1 border-none px-0 ring-0 transition-colors focus-visible:border-none focus-visible:outline-none focus-visible:ring-0"
+          className="min-w-6 flex-1 border-none px-0 ring-0 transition-colors focus-visible:border-none focus-visible:outline-none focus-visible:ring-0 md:min-w-[120px]"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onFocus={() => !disabled && setSearchDropDown(true)}

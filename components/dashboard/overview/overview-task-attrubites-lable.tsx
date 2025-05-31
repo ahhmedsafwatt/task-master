@@ -15,7 +15,7 @@ export const AttrbuiteLable = ({
     <Label
       htmlFor={label}
       className={cn(
-        'text-secondary-foreground hover:bg-accent hover:text-foreground relative mr-2 flex w-36 items-center gap-1.5 text-nowrap rounded-md px-3 py-1.5 transition-colors',
+        'text-secondary-foreground hover:bg-accent hover:text-foreground relative mr-2 flex w-36 items-center gap-1.5 text-nowrap rounded-md px-1.5 py-1.5 text-sm transition-colors md:px-3',
         className,
       )}
     >

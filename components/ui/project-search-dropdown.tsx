@@ -114,71 +114,71 @@ export const ProjectsSearchDropDown = ({
   return (
     <div className="flex">
       <AttrbuiteLable label={label} icon={<Box size={18} />} />
-      <div className="relative flex-1">
-        <div className="relative">
-          <Input
-            type="text"
-            id={label.toLowerCase()}
-            name={label.toLowerCase()}
-            placeholder={placeholder}
-            value={searchQuery}
-            onChange={handleInputChange}
-            onFocus={() => setSearchDropDown(true)}
-            onBlur={handleInputBlur}
-            onClick={() => setSearchDropDown(true)}
-            disabled={disabled || isLoading}
-            className={cn(
-              'h-8 w-full border-none ring-0 transition-colors focus-visible:border-none focus-visible:outline-none focus-visible:ring-0',
-              searchDropDown && 'bg-accent rounded-b-none',
-            )}
-          />
-          {isLoading && (
-            <div className="absolute right-2 top-1/2 -translate-y-1/2">
-              <Loader2 className="h-4 w-4 animate-spin" />
+
+      <div className="relative w-full">
+        <Input
+          type="text"
+          id={label.toLowerCase()}
+          autoComplete="off"
+          name={label.toLowerCase()}
+          placeholder={placeholder}
+          value={searchQuery}
+          onChange={handleInputChange}
+          onFocus={() => setSearchDropDown(true)}
+          onBlur={handleInputBlur}
+          onClick={() => setSearchDropDown(true)}
+          disabled={disabled || isLoading}
+          className={cn(
+            'h-8 w-full border-none ring-0 transition-colors focus-visible:border-none focus-visible:outline-none focus-visible:ring-0',
+            searchDropDown && 'bg-accent rounded-b-none',
+          )}
+        />
+        {isLoading && (
+          <div className="absolute right-2 top-1/2 -translate-y-1/2">
+            <Loader2 className="h-4 w-4 animate-spin" />
+          </div>
+        )}
+        <div
+          ref={dropDownRef}
+          id={`${label}-listbox`}
+          role="listbox"
+          className={cn(
+            'bg-card absolute right-0 top-full z-10 max-h-40 w-full overflow-auto rounded-md rounded-t-none shadow-lg transition-all duration-75',
+            searchDropDown
+              ? 'visible scale-100'
+              : 'pointer-events-none invisible opacity-0',
+          )}
+        >
+          {isLoading ? (
+            <div className="text-muted-foreground flex h-20 items-center justify-center text-sm">
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <span>Loading projects...</span>
+            </div>
+          ) : projects.length > 0 ? (
+            filteredProjects.map((project) => (
+              <div
+                tabIndex={0}
+                key={project.id}
+                className="hover:bg-accent focus:bg-accent cursor-pointer px-3 py-2 text-sm"
+                onMouseDown={() => {
+                  // Use onMouseDown to fire before onBlur
+                  handleProjectSelect(project)
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    handleProjectSelect(project)
+                  }
+                }}
+                aria-label={`Select item ${project.name}`}
+              >
+                <div>{project.name}</div>
+              </div>
+            ))
+          ) : (
+            <div className="text-muted-foreground flex h-20 items-center justify-center text-sm">
+              <span>No projects found</span>
             </div>
           )}
-          <div
-            ref={dropDownRef}
-            id={`${label}-listbox`}
-            role="listbox"
-            className={cn(
-              'bg-card absolute right-0 top-full z-10 max-h-40 w-full overflow-auto rounded-md rounded-t-none shadow-lg transition-all duration-75',
-              searchDropDown
-                ? 'visible scale-100'
-                : 'pointer-events-none invisible opacity-0',
-            )}
-          >
-            {isLoading ? (
-              <div className="text-muted-foreground flex h-20 items-center justify-center text-sm">
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                <span>Loading projects...</span>
-              </div>
-            ) : projects.length > 0 ? (
-              filteredProjects.map((project) => (
-                <div
-                  tabIndex={0}
-                  key={project.id}
-                  className="hover:bg-accent focus:bg-accent cursor-pointer px-3 py-2 text-sm"
-                  onMouseDown={() => {
-                    // Use onMouseDown to fire before onBlur
-                    handleProjectSelect(project)
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      handleProjectSelect(project)
-                    }
-                  }}
-                  aria-label={`Select item ${project.name}`}
-                >
-                  <div>{project.name}</div>
-                </div>
-              ))
-            ) : (
-              <div className="text-muted-foreground flex h-20 items-center justify-center text-sm">
-                <span>No projects found</span>
-              </div>
-            )}
-          </div>
         </div>
       </div>
     </div>
