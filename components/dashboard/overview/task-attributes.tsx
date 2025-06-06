@@ -13,7 +13,6 @@ import {
 } from 'lucide-react'
 import { TaskDatePickerField } from './overview-task-date-picker'
 import { Selections } from './overview-task-selections'
-import { useCreateTaskForm } from '@/hooks/use-create-task-form'
 import { getProjects, getProjectMembers } from '@/lib/server/project-actions'
 import { userProfile, Projects, createTaskFormData } from '@/lib/types/types'
 import { useState, useEffect } from 'react'
@@ -39,6 +38,11 @@ export const TaskAttributs = ({
 
   // Fetch projects on component mount
   useEffect(() => {
+    if (formData.is_private === true) {
+      setProjects([])
+      setIsLoadingProjects(false)
+      return
+    }
     const fetchProjects = async () => {
       try {
         const { data, error } = await getProjects()
@@ -58,7 +62,7 @@ export const TaskAttributs = ({
     }
 
     fetchProjects()
-  }, [])
+  }, [formData.is_private])
 
   // Fetch project members when a project is selected
   useEffect(() => {

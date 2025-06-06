@@ -6,8 +6,6 @@ import { useSidebar } from '@/hooks/use-sidebar'
 import { SidebarNavigation } from './sidebar-navigation'
 import { SidebarProjects } from './sidebar-projects'
 import { MenuIcon } from '@/components/ui/menu-icon'
-import { PanelLeftClose, PanelRightClose } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { SidebarHeader } from './sidebar-header'
 import { Projects } from '@/lib/types/types'
 
@@ -38,25 +36,6 @@ export function AppSidebar({ projects }: { projects: Projects[] }) {
           />
         )}
       </div>
-
-      {/* Pin/Unpin Button for Desktop */}
-      {!isMobile && (
-        <div className="fixed bottom-5 left-5 z-50">
-          <Button
-            aria-label={isPinned ? 'Unpin sidebar' : 'Pin sidebar'}
-            variant="ghost"
-            size={'smIcon'}
-            onClick={togglePin}
-            className="hover:bg-accent box-content cursor-pointer rounded-md p-1 transition-colors duration-300"
-          >
-            {isPinned ? (
-              <PanelLeftClose size={18} />
-            ) : (
-              <PanelRightClose size={18} />
-            )}
-          </Button>
-        </div>
-      )}
 
       <nav
         aria-label="Main navigation"
