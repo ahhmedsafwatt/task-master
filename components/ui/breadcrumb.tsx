@@ -1,6 +1,6 @@
 'use client'
 import { useBreadcrumbs } from '@/hooks/use-breadcrumbs'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import Link from 'next/link'
 
 export default function BreadCrumbs({ className }: { className?: string }) {

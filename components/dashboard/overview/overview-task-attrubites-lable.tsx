@@ -1,5 +1,5 @@
 import { Label } from '@/components/ui/label'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import React, { ReactNode } from 'react'
 
 export const AttrbuiteLable = ({

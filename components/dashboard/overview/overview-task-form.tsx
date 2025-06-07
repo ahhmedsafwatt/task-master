@@ -10,7 +10,7 @@ import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { PrivateTaskCheckbox } from './overview-task-private'
 import Link from 'next/link'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import { TaskAttributs } from './task-attributes'
 
 // Task form component
@@ -89,13 +89,13 @@ export const TaskForm = ({
       />
       {/* Markdown Description */}
       <Textarea
-        placeholder="Add description (Markdown supported)..."
+        placeholder="what do you want to accomplish?"
         name="markdown_content"
         value={formData.markdown_content || ''}
         onChange={(e) =>
           updateFormDataFields('markdown_content', e.target.value)
         }
-        className="dark:bg-secondary bg-secondary mt-3 min-h-[100px] resize-none overflow-y-auto text-pretty border-none px-2 pb-3 pt-0 shadow-none ring-0 selection:bg-[#373b67] focus:outline-none focus:ring-0 focus-visible:ring-0"
+        className="dark:bg-secondary bg-secondary mt-3 h-60 min-h-[100px] resize-none overflow-y-auto text-pretty border-none px-2 pb-3 pt-0 shadow-none ring-0 selection:bg-[#373b67] focus:outline-none focus:ring-0 focus-visible:ring-0"
       />
 
       <Separator className="my-4" />

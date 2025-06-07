@@ -64,7 +64,7 @@ export const OverViewTasksDialog = () => {
           </Tooltip>
         </TooltipProvider>
       </DialogTrigger>
-      <DialogContent className="dark:bg-secondary bg-background max-h-[calc(100%-3rem)] w-full gap-0 overflow-auto md:max-h-[calc(100%-6rem)] md:max-w-3xl lg:max-w-5xl">
+      <DialogContent className="dark:bg-secondary bg-background max-h-[calc(100%-3rem)] w-full gap-0 overflow-auto md:max-h-[calc(100%-1.5rem)] md:max-w-3xl lg:max-w-5xl">
         <TaskForm
           createTaskResponse={createTaskResponse}
           createTaskAction={createTaskAction}

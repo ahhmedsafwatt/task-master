@@ -6,7 +6,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import { ArrowDown, ArrowUp } from 'lucide-react'
 
 interface StatsCardProps {

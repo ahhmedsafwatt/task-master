@@ -23,10 +23,17 @@ export async function getProjects(): Promise<{
 
     // Fetch projects with their members
     const { data: projects, error: projectsError } = await supabase
-      .from('project_members')
-      .select('projects(*)')
-      .eq('user_id', user.id)
-      .neq('role', 'VIEWER')
+      .from('projects')
+      .select(
+        `
+          *,
+          project_members!inner(
+          role, user_id
+          )
+        `,
+      )
+      .eq('project_members.user_id', user.id)
+      .neq('project_members.role', 'VIEWER')
 
     if (projectsError) {
       console.error('Error fetching projects:', projectsError)
@@ -36,12 +43,8 @@ export async function getProjects(): Promise<{
       }
     }
 
-    const projectList = Array.isArray(projects)
-      ? projects.map((item) => item.projects)
-      : []
-
     return {
-      data: projectList as Projects[],
+      data: projects as Projects[],
       error: null,
     }
   } catch (error) {
@@ -73,10 +76,12 @@ export async function getProjectMembers(projectId: string): Promise<{
 
     // Fetch project members excluding viewers
     const { data: members, error: membersError } = await supabase
-      .from('project_members')
-      .select('profiles(*)')
-      .eq('project_id', projectId)
-      .neq('role', 'VIEWER')
+      .from('profiles')
+      .select(
+        `*, project_members!inner(
+          role, user_id)`,
+      )
+      .eq('project_members.project_id', projectId)
 
     if (membersError) {
       console.error('Error fetching project members:', membersError)
@@ -86,12 +91,8 @@ export async function getProjectMembers(projectId: string): Promise<{
       }
     }
 
-    const membersList = Array.isArray(members)
-      ? members.map((item) => item.profiles)
-      : []
-
     return {
-      data: membersList as userProfile[],
+      data: members as userProfile[],
       error: null,
     }
   } catch (error) {

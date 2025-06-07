@@ -1,115 +1,90 @@
-import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Enums, Tables } from '@/lib/types/database.types'
-import { cn } from '@/lib/utils'
-import { Duration, format, intervalToDuration, isAfter } from 'date-fns'
-import { Eye } from 'lucide-react'
+import { format } from 'date-fns'
+import { Eye, Folder } from 'lucide-react'
 import Link from 'next/link'
 import { useMemo } from 'react'
 
-const getRemainingTime = (targetDate: Date): Duration | null => {
-  const now = new Date()
-
-  if (isAfter(now, targetDate)) {
-    return null
-  }
-
-  return intervalToDuration({
-    start: now,
-    end: targetDate,
-  })
-}
-
-const formatDuration = (duration: Duration | null): string => {
-  if (!duration) return 'overdue'
-
-  const { months = 0, days = 0, hours = 0, minutes = 0 } = duration
-
-  if (months > 0) {
-    return `${months} ${months === 1 ? 'month' : 'months'}`
-  }
-
-  if (days > 0) {
-    return `${days} ${days === 1 ? 'day' : 'days'}`
-  }
-
-  if (hours > 0) {
-    return `${hours} ${hours === 1 ? 'hour' : 'hours'}`
-  }
-
-  if (minutes > 0) {
-    return `${minutes || 0} ${minutes === 1 ? 'minute' : 'minutes'}`
-  }
-
-  return 'Less than a minute'
-}
-
 const getStatusColor = (status: Enums<'task_status'>): string => {
   const statusColors = {
-    IN_PROGRESS: 'bg-in-progress',
-    BACKLOG: 'bg-zinc-500',
-    COMPLETED: 'bg-success',
+    IN_PROGRESS: 'bg-blue-100 text-blue-800 ',
+    BACKLOG: 'bg-gray-100 text-gray-800 ',
+    COMPLETED: 'bg-green-100 text-green-800 ',
   } as const
 
-  return statusColors[status] || 'bg-gray-500'
+  return statusColors[status] || 'bg-gray-100 text-gray-800 '
+}
+
+const getPriorityColor = (priority: Enums<'task_priority'>): string => {
+  const priorityColors = {
+    URGENT: 'bg-red-500 text-white',
+    HIGH: 'bg-orange-500 text-white',
+    MEDIUM: 'bg-yellow-500 text-white',
+    LOW: 'bg-green-500 text-white',
+  } as const
+
+  return priorityColors[priority] || 'bg-gray-500 text-white'
 }
 
 export const TaskItem = ({ task }: { task: Tables<'tasks'> }) => {
-  const remaining = useMemo(() => {
-    if (!task.due_date) return null
-    return formatDuration(getRemainingTime(new Date(task.due_date)))
-  }, [task.due_date])
-
   const statusColor = useMemo(
     () => getStatusColor(task.status as Enums<'task_status'>),
     [task.status],
   )
 
-  return (
-    <div className="dark:bg-primary bg-secondary dark:hover:bg-accent/50 hover:bg-muted relative flex cursor-pointer items-center justify-between rounded-lg border border-dashed p-3 shadow-md transition-colors">
-      <Link
-        href={`/dashboard/my-tasks/${task.id}`}
-        className="flex-1"
-        aria-label={`View task: ${task.title}`}
-      >
-        <div>
-          <h3 className="line-clamp-2 font-medium">{task.title}</h3>
-          <div className="text-muted-foreground truncate text-sm">
-            Project: {task.project_name}
-          </div>
+  const priorityColor = useMemo(
+    () => getPriorityColor(task.priority as Enums<'task_priority'>),
+    [task.priority],
+  )
 
-          <div className="mt-2 flex items-center gap-2">
-            {task.status && (
-              <div
-                className={cn('h-2 w-2 rounded-full', statusColor)}
-                aria-label={`Status: ${task.status.replace('_', ' ').toLowerCase()}`}
-              />
-            )}
-            <div className="text-muted-foreground flex items-center gap-1 text-xs">
-              {task.due_date && (
-                <span>Starts {format(new Date(task.due_date), 'dd MMM')}</span>
-              )}
-              {task.due_date && task.due_date && <span>•</span>}
-              {task.due_date && (
-                <span
-                  className={cn(
-                    remaining === 'overdue' && 'text-destructive font-medium',
-                  )}
-                >
-                  Due {remaining}
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
-      </Link>
-      <Button
-        aria-label={`View details for ${task.title}`}
-        variant="secondary"
-        size="smIcon"
-        className="hover:text-foreground ml-2 flex-shrink-0"
+  return (
+    <Link href={`/dashboard/my-tasks/${task.id}`} className="w-full">
+      <Card
+        className={`group h-full min-h-48 w-full min-w-72 gap-2 shadow-md transition-shadow duration-300 hover:shadow-lg`}
       >
-        <Eye size={18} />
-      </Button>
-    </div>
+        <CardHeader className="px-3">
+          <CardTitle className="line-clamp-3 w-full text-ellipsis text-base group-hover:underline">
+            {task.title}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-3 px-3">
+          {task.project_name && (
+            <div className="text-muted-foreground flex items-center">
+              <Folder className="size-4" />
+              <span className="ml-1.5 text-sm leading-none">
+                {task.project_name || 'No project'}
+              </span>
+            </div>
+          )}
+          {task.is_private && (
+            <div className="text-muted-foreground text-sm">
+              <span>Private Task</span>
+            </div>
+          )}
+          <div
+            className={`w-fit rounded-md px-2 py-1 text-xs font-semibold ${statusColor}`}
+          >
+            {task.status}
+          </div>
+          <div
+            className={`w-fit rounded-md px-2 py-1 text-xs font-semibold ${priorityColor}`}
+          >
+            {task.priority}
+          </div>
+          {task.due_date &&
+            (!task.end_date ? (
+              <div className="text-muted-foreground text-sm">
+                <span>{format(new Date(task.due_date), 'MMM dd, yyyy')}</span>
+              </div>
+            ) : (
+              <div className="text-muted-foreground text-sm">
+                <span>{format(new Date(task.due_date), 'MMM dd, yyyy')}</span>
+                <span>{` -> `}</span>
+                <span>{format(new Date(task.end_date), 'MMM dd, yyyy')}</span>
+              </div>
+            ))}
+        </CardContent>
+      </Card>
+    </Link>
   )
 }

@@ -67,54 +67,10 @@ export default function Page() {
     },
   ]
 
-  // // Projects data
-  // const projectTasks = [
-  //   {
-  //     id: 'p1',
-  //     title: 'Yellow Branding',
-  //     project: '1 task due soon',
-  //     dueIn: '',
-  //   },
-  //   {
-  //     id: 'p2',
-  //     title: 'Mogo Web Design',
-  //     project: 'no task',
-  //     dueIn: '',
-  //   },
-  //   {
-  //     id: 'p3',
-  //     title: 'Futurework',
-  //     project: '7 task due soon',
-  //     dueIn: '',
-  //   },
-  // ]
-
-  // // People data
-  // const peopleData = [
-  //   {
-  //     id: 'pe1',
-  //     title: 'Marc Atenson',
-  //     project: 'marcmine@gmail.com',
-  //     dueIn: '',
-  //   },
-  //   {
-  //     id: 'pe2',
-  //     title: 'Susan Drake',
-  //     project: 'contact@susandrake.com',
-  //     dueIn: '',
-  //   },
-  //   {
-  //     id: 'pe3',
-  //     title: 'Ronald Richards',
-  //     project: 'ronaldrichards@gmail.com',
-  //     dueIn: '',
-  //   },
-  // ]
-
   return (
-    <div className="mt-3 flex flex-col gap-6">
+    <div className="mt-3 flex flex-col gap-10">
       {/* Quick Stats */}
-      <HorizontalSlider className="px-4 py-2">
+      <HorizontalSlider className="px-4 pt-2">
         {statsCards.map((card, index) => (
           <StatsCard
             key={card.title + index}
@@ -126,6 +82,7 @@ export default function Page() {
       </HorizontalSlider>
 
       <OverViewTasks />
+
       <OverViewProjects />
     </div>
   )

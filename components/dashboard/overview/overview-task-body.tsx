@@ -1,7 +1,6 @@
 import { getTasks } from '@/lib/server/queries'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
 import { TaskItem } from './overview-task-item'
+import HorizontalSlider from '@/components/ui/horizontal-slider'
 
 export const OverViewTasksBody = async () => {
   const tasksResponse = await getTasks()
@@ -17,29 +16,12 @@ export const OverViewTasksBody = async () => {
   }
 
   const tasks = tasksResponse.data
-  const isEmpty = tasks.length === 0
-
-  if (isEmpty) {
-    return (
-      <div className="flex h-48 flex-col items-center justify-center gap-2">
-        <p className="text-muted-foreground text-sm">No tasks found</p>
-        <p className="text-muted-foreground text-xs">
-          Create your first task to get started
-        </p>
-      </div>
-    )
-  }
 
   return (
-    <>
-      <div className="h-fit max-h-96 space-y-2">
-        {tasks.map((task) => (
-          <TaskItem key={task.id} task={task} />
-        ))}
-      </div>
-      <Button asChild variant="inverted" className="mt-5 w-full">
-        <Link href="/dashboard/my-tasks">View all tasks ({tasks.length})</Link>
-      </Button>
-    </>
+    <HorizontalSlider className="px-4">
+      {tasks.map((task) => (
+        <TaskItem key={task.id} task={task} />
+      ))}
+    </HorizontalSlider>
   )
 }

@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState, useEffect } from 'react'
 import { Input } from './input'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import { AttrbuiteLable } from '../dashboard/overview/overview-task-attrubites-lable'
 import { Box, Loader2 } from 'lucide-react'
 import { Projects } from '@/lib/types/types'

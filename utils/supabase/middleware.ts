@@ -40,7 +40,11 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  if (request.nextUrl.pathname.startsWith('/auth') && user) {
+  if (
+    (request.nextUrl.pathname.startsWith('/auth') ||
+      request.nextUrl.pathname === '/dashboard') &&
+    user
+  ) {
     const url = request.nextUrl.clone()
     url.pathname = '/dashboard/overview'
     return NextResponse.redirect(url)
