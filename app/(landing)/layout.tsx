@@ -9,7 +9,7 @@ export default function MainLayout({
   return (
     <>
       <LandingHeader />
-      <main>{children}</main>
+      {children}
       <LandingFooter />
     </>
   )

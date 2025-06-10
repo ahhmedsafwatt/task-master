@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Settings } from 'lucide-react'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
-import { UserProfileCard } from '../user-profile-card'
+import { UserProfileCard } from './user-profile-card'
 import { SignOut } from '@/components/auth/signout'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { getProfile } from '@/lib/server/queries'

@@ -113,8 +113,8 @@ export const getTaskAssignees = async (limit = 4) => {
       .select(
         `
         *,
-        assignees:task_assignees(
-          profiles:profiles(*)
+        assignees:task_assignees!inner(
+          profiles:profiles!inner(*)
         )
       `,
       )

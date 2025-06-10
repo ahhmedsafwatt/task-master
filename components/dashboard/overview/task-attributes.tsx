@@ -13,7 +13,7 @@ import {
 } from 'lucide-react'
 import { TaskDatePickerField } from './overview-task-date-picker'
 import { Selections } from './overview-task-selections'
-import { getProjects, getProjectMembers } from '@/lib/server/project-actions'
+
 import { userProfile, Projects, createTaskFormData } from '@/lib/types/types'
 import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
@@ -34,9 +34,7 @@ export const TaskAttributs = ({
   const [users, setUsers] = useState<userProfile[]>([])
   const [projects, setProjects] = useState<Projects[]>([])
   const [isLoadingProjects, setIsLoadingProjects] = useState(true)
-  //   const [showAttributes, setShowAttributes] = useState<boolean>(true)
 
-  // Fetch projects on component mount
   useEffect(() => {
     if (formData.is_private === true) {
       setProjects([])
@@ -45,9 +43,12 @@ export const TaskAttributs = ({
     }
     const fetchProjects = async () => {
       try {
-        const { data, error } = await getProjects()
+        const { data, error } = await fetch('/api/projects').then((res) => {
+          return res.json()
+        })
+
         if (error) {
-          toast.error('Failed to fetch projects')
+          toast.error(`Failed to fetch projects - ${error}`)
           return
         }
         if (data) {
@@ -73,12 +74,19 @@ export const TaskAttributs = ({
       }
 
       try {
-        const { data, error } = await getProjectMembers(formData.project_id)
+        const { data, error } = await fetch(
+          `/api/projects/${formData.project_id}/members`,
+        ).then((res) => {
+          return res.json()
+        })
+
         if (error) {
+          console.log(error)
           toast.error('Failed to fetch project members')
           return
         }
         if (data) {
+          console.log(data)
           setUsers([...data])
         }
       } catch (error) {
