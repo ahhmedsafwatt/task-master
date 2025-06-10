@@ -1,6 +1,6 @@
 import { LoaderIcon } from 'lucide-react'
 import { Button } from './button'
-import { cn } from '@/lib/utils/utils'
+import { cn } from '@/lib/utils'
 
 export function SubmitButton({
   isPending,

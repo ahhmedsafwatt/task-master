@@ -10,7 +10,7 @@ import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { PrivateTaskCheckbox } from './overview-task-private'
 import Link from 'next/link'
-import { cn } from '@/lib/utils/utils'
+import { cn } from '@/lib/utils'
 import { TaskAttributs } from './task-attributes'
 
 // Task form component

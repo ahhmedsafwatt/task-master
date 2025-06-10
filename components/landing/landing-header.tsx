@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { MenuIcon } from '@/components/ui/menu-icon'
 import React, { useEffect, useState } from 'react'
-import { cn } from '@/lib/utils/utils'
+import { cn } from '@/lib/utils'
 
 import { FlipingText } from '@/components/ui/fliping-text'
 import { IoLogoGithub, IoMdArrowDropup, IoIosCode } from 'react-icons/io'

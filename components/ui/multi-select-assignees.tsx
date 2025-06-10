@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useRef, useState } from 'react'
-import { cn } from '@/lib/utils/utils'
+import { cn } from '@/lib/utils'
 import { Input } from '@/components/ui/input'
 import { UserPlus, X } from 'lucide-react'
 import { userProfile } from '@/lib/types/types'

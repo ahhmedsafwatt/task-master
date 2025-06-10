@@ -68,7 +68,7 @@ export default function Page() {
   ]
 
   return (
-    <div className="mt-3 flex flex-col gap-10">
+    <div className="mt-3 flex flex-col gap-5">
       {/* Quick Stats */}
       <HorizontalSlider className="px-4 pt-2">
         {statsCards.map((card, index) => (
@@ -81,9 +81,10 @@ export default function Page() {
         ))}
       </HorizontalSlider>
 
-      <OverViewTasks />
-
-      <OverViewProjects />
+      <div className="grid grid-cols-1 gap-4 px-4 lg:grid-cols-2">
+        <OverViewTasks />
+        <OverViewProjects />
+      </div>
     </div>
   )
 }

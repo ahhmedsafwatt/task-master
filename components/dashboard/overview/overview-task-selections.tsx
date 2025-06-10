@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { cn } from '@/lib/utils/utils'
+import { cn } from '@/lib/utils'
 
 // Priority and Status selection component
 export const Selections = ({

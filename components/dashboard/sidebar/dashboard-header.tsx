@@ -1,5 +1,5 @@
 import { Input } from '@/components/ui/input'
-import { cn } from '@/lib/utils/utils'
+import { cn } from '@/lib/utils'
 import BreadCrumbs from '@/components/ui/breadcrumb'
 import { NavUser } from './nav-user'
 import { Search } from 'lucide-react'

@@ -17,16 +17,22 @@ export interface TaskResponse {
   }
 }
 
-export type userProfile = Tables<'profiles'>
-
 export interface NavItem {
   title: string
   href: string
   icon: ReactNode
 }
 
+export type userProfile = Tables<'profiles'>
+
 export type Projects = Tables<'projects'>
 
-export interface createTaskFormData extends TablesInsert<'tasks'> {
+export type Tasks = Tables<'tasks'>
+
+export type TasksWithAssigness = Tasks & {
+  assignees: userProfile[]
+}
+
+export type createTaskFormData = TablesInsert<'tasks'> & {
   assignee_ids: string[]
 }

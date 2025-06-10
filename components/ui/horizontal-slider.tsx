@@ -2,7 +2,7 @@
 
 import type React from 'react'
 import { useRef, useState, useEffect, type ReactNode } from 'react'
-import { cn } from '@/lib/utils/utils'
+import { cn } from '@/lib/utils'
 
 interface HorizontalSliderProps {
   children: ReactNode

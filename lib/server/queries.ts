@@ -50,12 +50,12 @@ export async function getuser() {
     return data.user
   } catch (error) {
     console.error('Get session error:', error)
-    return null
+    return { data: null, error }
   }
 }
 
 /**
- * Get Project data |
+ * Get all related Project |
  * fetches all projects from the database if you don't have rls enabled you would have to pass a user_id as a comparison value
  */
 export const getProjects = async () => {
@@ -71,13 +71,14 @@ export const getProjects = async () => {
     return { data, error: null }
   } catch (error) {
     console.error('Unexpected error in getProjects:', error)
-    return {
-      data: null,
-      error: { message: 'Failed to fetch projects', details: error },
-    }
+    return { data: null, error }
   }
 }
 
+/**
+ * Get all related Tasks |
+ * fetches all Task from the database if you don't have rls enabled you would have to pass a user_id as a comparison value
+ */
 export const getTasks = async (limit = 4) => {
   try {
     const supabase = await createSupabaseClient()
@@ -95,9 +96,45 @@ export const getTasks = async (limit = 4) => {
     return { data, error: null }
   } catch (error) {
     console.error('Unexpected error in getTasks:', error)
-    return {
-      data: null,
-      error: { message: 'Failed to fetch tasks', details: error },
+    return { data: null, error }
+  }
+}
+
+/**
+ * Get all related Task Assingees |
+ * fetches all Task Assignees from the database
+ * Argus: task_id - the id of the task to get assignees for
+ */
+export const getTaskAssignees = async (limit = 4) => {
+  try {
+    const supabase = await createSupabaseClient()
+    const { data, error } = await supabase
+      .from('tasks')
+      .select(
+        `
+        *,
+        assignees:task_assignees(
+          profiles:profiles(*)
+        )
+      `,
+      )
+      .order('created_at', { ascending: false })
+      .limit(limit)
+
+    if (error) {
+      console.error('Supabase query error:', error)
+      return { data: null, error }
     }
+
+    // Transform the data to match the expected format
+    const transformedData = data?.map((task) => ({
+      ...task,
+      assignees: task.assignees.map((a: any) => a.profiles),
+    }))
+
+    return { data: transformedData, error: null }
+  } catch (error) {
+    console.error('Unexpected error in getTasks:', error)
+    return { data: null, error }
   }
 }
