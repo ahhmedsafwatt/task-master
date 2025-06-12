@@ -30,21 +30,6 @@ const navigationItems: Navlinks[] = [
   },
   { title: 'Pricing', href: '/pricing' },
   { title: 'Story', href: '/story' },
-  {
-    title: 'Developers',
-    children: [
-      {
-        title: 'Github',
-        href: 'https://github.com/ahhmedsafwat/task-master',
-        icon: <IoLogoGithub size={24} />,
-      },
-      {
-        title: 'API Documentation',
-        href: '/developers/api',
-        icon: <IoIosCode size={24} />,
-      },
-    ],
-  },
 ]
 
 export function LandingHeader() {

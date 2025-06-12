@@ -3,7 +3,7 @@
 import { useMemo, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { Input } from '@/components/ui/input'
-import { UserPlus, X } from 'lucide-react'
+import { Loader2, UserPlus, X } from 'lucide-react'
 import { userProfile } from '@/lib/types/types'
 import Image from 'next/image'
 import { AttrbuiteLable } from '../dashboard/overview/overview-task-attrubites-lable'
@@ -15,6 +15,7 @@ type MultiSelectProps = {
   maxDisplayItems?: number
   disabled?: boolean
   label: string
+  isLoading?: boolean
 }
 
 export function MultiSelectAssignees({
@@ -24,6 +25,7 @@ export function MultiSelectAssignees({
   disabled = false,
   onItemSelect,
   label,
+  isLoading = false,
 }: MultiSelectProps) {
   const [searchDropDown, setSearchDropDown] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
@@ -110,6 +112,11 @@ export function MultiSelectAssignees({
         )}
         onClick={disabled ? undefined : handleContainerClick}
       >
+        {isLoading && (
+          <div className="absolute right-2 top-1/2 -translate-y-1/2">
+            <Loader2 className="text-muted-foreground animate-spin" />
+          </div>
+        )}
         {displayedUsers.map((user) => (
           <div
             key={user.id}

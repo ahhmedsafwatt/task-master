@@ -51,7 +51,7 @@ export function AppSidebar({ projects }: { projects: Projects[] }) {
         <div
           ref={navRef}
           className={cn(
-            'bg-secondary dark:bg-primary relative z-40 flex h-full w-60 flex-col py-4 pl-2 pr-2 transition-all duration-300 ease-in-out',
+            'bg-secondary dark:bg-primary relative z-40 flex h-full w-60 flex-col gap-8 py-4 pl-2 pr-2 transition-all duration-300 ease-in-out',
             // Floating state when not pinned but hovering
             !isPinned && !isMobile && isNavVisible
               ? 'left-0 m-2 h-[calc(100%-1rem)] rounded-md border shadow-2xl'
@@ -67,10 +67,9 @@ export function AppSidebar({ projects }: { projects: Projects[] }) {
             togglePin={togglePin}
           />
 
-          <Separator decorative className="my-3" />
           {/* Navigation items */}
           <SidebarNavigation onItemClick={closeNav} />
-          <Separator decorative className="my-3" />
+
           {/* Projects section */}
           <SidebarProjects onItemClick={closeNav} projects={projects} />
         </div>

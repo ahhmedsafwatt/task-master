@@ -68,9 +68,9 @@ export default function Page() {
   ]
 
   return (
-    <div className="mt-3 flex flex-col gap-5">
+    <div className="flex flex-col gap-5 py-6">
       {/* Quick Stats */}
-      <HorizontalSlider className="px-4 pt-2">
+      <HorizontalSlider className="px-4">
         {statsCards.map((card, index) => (
           <StatsCard
             key={card.title + index}

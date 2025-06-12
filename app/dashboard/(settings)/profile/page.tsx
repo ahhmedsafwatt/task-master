@@ -2,7 +2,7 @@ import { ProfileSettingsCard } from '@/components/dashboard/settings/profile-set
 
 export const metadata = {
   title: {
-    absolute: 'Profile Settings | Task Master',
+    absolute: 'Task Master | Profile Settings ',
   },
   description: 'Manage your profile settings',
 }

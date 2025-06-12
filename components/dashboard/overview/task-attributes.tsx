@@ -13,17 +13,18 @@ import {
 } from 'lucide-react'
 import { TaskDatePickerField } from './overview-task-date-picker'
 import { Selections } from './overview-task-selections'
-
 import { userProfile, Projects, createTaskFormData } from '@/lib/types/types'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { toast } from 'sonner'
+import { useQuery } from '@tanstack/react-query'
+import { useProjects } from '@/hooks/use-projects'
+import { useProjectMembers } from '@/hooks/use-project-members'
 
 interface TaskAttributesProps {
   updateFormDataFields: <K extends keyof createTaskFormData>(
     field: K,
     value: createTaskFormData[K],
   ) => void
-
   formData: createTaskFormData
 }
 
@@ -31,72 +32,29 @@ export const TaskAttributs = ({
   formData,
   updateFormDataFields,
 }: TaskAttributesProps) => {
-  const [users, setUsers] = useState<userProfile[]>([])
-  const [projects, setProjects] = useState<Projects[]>([])
-  const [isLoadingProjects, setIsLoadingProjects] = useState(true)
+  // Query for projects
+  const {
+    data: projects = [],
+    isLoading: isLoadingProjects,
+    error: projectsError,
+  } = useProjects(!formData.is_private)
 
-  useEffect(() => {
-    if (formData.is_private === true) {
-      setProjects([])
-      setIsLoadingProjects(false)
-      return
-    }
-    const fetchProjects = async () => {
-      try {
-        const { data, error } = await fetch('/api/projects').then((res) => {
-          return res.json()
-        })
+  // Query for project members
+  const {
+    data: users = [],
+    isLoading: isLoadingMembers,
+    error: membersError,
+  } = useProjectMembers(formData.project_id || '')
 
-        if (error) {
-          toast.error(`Failed to fetch projects - ${error}`)
-          return
-        }
-        if (data) {
-          setProjects([...data])
-        }
-      } catch (error) {
-        console.error('Error fetching projects:', error)
-        toast.error('Failed to fetch projects')
-      } finally {
-        setIsLoadingProjects(false)
-      }
-    }
+  // Handle errors with toasts
+  if (projectsError) {
+    toast.error('Failed to fetch projects')
+  }
 
-    fetchProjects()
-  }, [formData.is_private])
+  if (membersError) {
+    toast.error('Failed to fetch project members')
+  }
 
-  // Fetch project members when a project is selected
-  useEffect(() => {
-    const fetchProjectMembers = async () => {
-      if (!formData.project_id) {
-        setUsers([])
-        return
-      }
-
-      try {
-        const { data, error } = await fetch(
-          `/api/projects/${formData.project_id}/members`,
-        ).then((res) => {
-          return res.json()
-        })
-
-        if (error) {
-          console.log(error)
-          toast.error('Failed to fetch project members')
-          return
-        }
-        if (data) {
-          console.log(data)
-          setUsers([...data])
-        }
-      } catch (error) {
-        console.error('Error fetching project members:', error)
-        toast.error('Failed to fetch project members')
-      }
-    }
-
-    fetchProjectMembers()
-  }, [formData.project_id])
   return (
     <div className="flex flex-col gap-3.5">
       {/* Project Selection */}
@@ -177,9 +135,11 @@ export const TaskAttributs = ({
         disabled={
           !!formData.is_private ||
           formData.project_id === '' ||
-          formData.project_id === null
+          formData.project_id === null ||
+          isLoadingMembers
         }
         onItemSelect={(value) => updateFormDataFields('assignee_ids', value)}
+        isLoading={isLoadingMembers}
       />
 
       <input

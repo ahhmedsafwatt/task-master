@@ -2,13 +2,13 @@ import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata } from 'next'
 import { geistmono, inter, cabinet } from '@/lib/fonts'
-import Provider from '@/lib/context/provider'
+import Provider from '@/lib/providers/provider'
 import './globals.css'
 
 export const metadata: Metadata = {
   title: {
     default: 'Task Master',
-    template: '%s | Task Master',
+    template: 'Task Master | %s',
   },
   description:
     'Streamline your workflow with Task Master - the intuitive task management application that helps you organize, prioritize, and track your projects efficiently.',

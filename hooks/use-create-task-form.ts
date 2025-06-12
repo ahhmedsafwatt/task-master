@@ -1,8 +1,6 @@
 import { createTaskFormData } from '@/lib/types/types'
 import { useState, useCallback } from 'react'
 
-const STORAGE_KEY = 'task-form-data'
-
 const defaultFormData: createTaskFormData = {
   title: '',
   assignee_ids: [],

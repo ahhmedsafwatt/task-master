@@ -37,7 +37,7 @@ export function SidebarNavigation({ onItemClick }: SidebarNavigationProps) {
   return (
     <>
       <div className="space-y-2 overflow-y-auto">
-        <div className="text-muted-foreground text-xs">General</div>
+        <div className="text-muted-foreground mb-3 text-xs">General</div>
         {navItems.map((item) => {
           const isActive = pathname === item.href
           return (

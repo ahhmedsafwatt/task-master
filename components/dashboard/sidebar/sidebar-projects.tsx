@@ -25,7 +25,7 @@ export function SidebarProjects({
 
   return (
     <div title="projects" className="flex-1 overflow-y-auto">
-      <div className="text-muted-foreground flex items-center justify-between rounded-md p-1.5 px-2 text-xs">
+      <div className="text-muted-foreground mb-3 flex items-center justify-between rounded-md p-1.5 px-2 text-xs">
         <span>projects</span>
         <TooltipProvider>
           <Tooltip>

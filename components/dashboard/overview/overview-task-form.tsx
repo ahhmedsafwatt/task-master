@@ -110,6 +110,7 @@ export const TaskForm = ({
             if (checked) {
               updateFormDataFields('project_id', null)
               updateFormDataFields('assignee_ids', [])
+              updateFormDataFields('project_name', '')
             }
           }}
         />
