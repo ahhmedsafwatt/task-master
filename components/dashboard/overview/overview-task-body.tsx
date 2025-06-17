@@ -28,13 +28,13 @@ export const OverviewTasksBody = async () => {
   }
 
   return (
-    <>
+    <div className="flex flex-col justify-between">
       <div className="flex flex-col gap-6">
         {tasks?.map((task) => <TaskItem key={task.id} task={task} />)}
       </div>
       <Button asChild variant="inverted" className="mt-5 w-full">
-        <Link href="/dashboard/tasks">View all tasks ({tasks?.length})</Link>
+        <Link href="/dashboard/tasks">View all tasks</Link>
       </Button>
-    </>
+    </div>
   )
 }

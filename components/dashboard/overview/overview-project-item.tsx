@@ -30,19 +30,21 @@ export function OverviewProjectItem({
       className="group block"
       aria-label={`View task: ${title}`}
     >
-      <div className="to-accent from-accent via-secondary relative flex rounded-xl border bg-gradient-to-r p-4 shadow-md">
+      <div className="to-accent from-accent via-secondary relative flex min-h-36 overflow-hidden rounded-xl border bg-gradient-to-r p-4 shadow-md">
         {/* Cover Image */}
 
-        <div className="relative mr-4 overflow-hidden rounded-md">
-          <Image
-            src={project_cover}
-            alt={title}
-            unoptimized
-            width={160}
-            height={120}
-            className="h-30 w-40 object-cover transition-transform duration-300 group-hover:scale-105"
-          />
-        </div>
+        {project_cover && (
+          <div className="h-30 relative mr-4 min-w-24 overflow-hidden rounded-md md:min-w-40">
+            <Image
+              src={project_cover}
+              alt={title}
+              unoptimized
+              width={200}
+              height={120}
+              className="h-30 w-28 object-cover transition-transform duration-300 group-hover:scale-105 md:w-40"
+            />
+          </div>
+        )}
         {/* Content */}
         <div className="flex w-full justify-between gap-2">
           <div className="flex h-full w-full flex-1 flex-col">
@@ -53,7 +55,7 @@ export function OverviewProjectItem({
               {title}
             </h3>
             {description && (
-              <p className="text-muted-foreground sm:max-w-2xs max-w-30 line-clamp-3 text-sm">
+              <p className="text-muted-foreground line-clamp-3 max-w-36 text-sm sm:max-w-xs">
                 {description}
               </p>
             )}

@@ -26,7 +26,9 @@ export const OverViewCard = ({
         <CardTitle className="text-lg font-medium">{title}</CardTitle>
         <CardDescription>{headerChildren}</CardDescription>
       </CardHeader>
-      <CardContent>{bodyChildren}</CardContent>
+      <CardContent className="flex h-full flex-col justify-between">
+        {bodyChildren}
+      </CardContent>
     </Card>
   )
 }

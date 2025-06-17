@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/tooltip'
 import { Projects } from '@/lib/types/types'
 import { OverviewProjectsDialog } from '../overview/overview-project-dialog'
+import { div } from 'motion/react-m'
 
 interface SidebarProjectsProps {
   onItemClick?: () => void
@@ -48,14 +49,17 @@ export function SidebarProjects({
               key={project.id + project.name}
               customIcon={
                 project.project_cover ? (
-                  <Image
-                    src={project.project_cover}
-                    alt={project.name}
-                    height={24}
-                    width={24}
-                    className="rounded-sm object-cover"
-                    unoptimized
-                  />
+                  <div className="max-h-7 max-w-8 rounded-sm">
+                    {' '}
+                    <Image
+                      src={project.project_cover}
+                      alt={project.name}
+                      height={28}
+                      unoptimized
+                      width={32}
+                      className="h-7 w-8 rounded-sm object-cover"
+                    />
+                  </div>
                 ) : undefined
               }
               onClick={onItemClick}

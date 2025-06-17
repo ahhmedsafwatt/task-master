@@ -13,6 +13,9 @@ const nextConfig: NextConfig = {
         hostname: 'gmlyqpnzcebtzxvgtwmc.supabase.co',
         pathname: '/storage/v1/object/**',
       },
+      {
+        hostname: 'images.unsplash.com',
+      },
     ],
   },
   experimental: {

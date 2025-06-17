@@ -43,9 +43,7 @@ export const OverviewProjectsBody = async () => {
         ))}
       </div>
       <Button asChild variant="inverted" className="mt-5 w-full">
-        <Link href="/dashboard/projects">
-          View all projects ({projects?.length})
-        </Link>
+        <Link href="/dashboard/projects">View all projects</Link>
       </Button>
     </>
   )

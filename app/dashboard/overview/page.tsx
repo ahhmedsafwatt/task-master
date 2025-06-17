@@ -81,7 +81,7 @@ export default function Page() {
         ))}
       </HorizontalSlider>
 
-      <div className="grid auto-rows-fr grid-cols-1 gap-4 px-4 lg:grid-cols-[repeat(auto-fit,minmax(450px,1fr))]">
+      <div className="grid grid-cols-1 gap-4 px-4 lg:grid-cols-[repeat(auto-fit,minmax(450px,1fr))]">
         <OverViewTasks />
         <OverViewProjects />
       </div>
