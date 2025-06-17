@@ -8,7 +8,6 @@ export async function OverViewTasks() {
   return (
     <OverViewCard
       title="Tasks"
-      className="col-span-2"
       bodyChildren={
         <Suspense fallback={<CardsSkeleton />}>
           <OverviewTasksBody />

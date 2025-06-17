@@ -35,7 +35,7 @@ export function NavigationItem({
         <div className={cn('mr-1.5', isActive ? 'opacity-100' : 'opacity-75')}>
           {customIcon}
         </div>
-        <span className="text-sm">{title}</span>
+        <span className="line-clamp-1 text-sm">{title}</span>
       </div>
     </Link>
   )

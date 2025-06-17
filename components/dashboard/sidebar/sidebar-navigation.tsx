@@ -17,7 +17,7 @@ export const navItems: NavItem[] = [
   },
   {
     title: 'Tasks',
-    href: '/dashboard/tasks',
+    href: '/dashboard/mytasks',
     icon: <LucideClipboardCheck size={18} />,
   },
 
@@ -35,23 +35,21 @@ export function SidebarNavigation({ onItemClick }: SidebarNavigationProps) {
   const pathname = usePathname()
 
   return (
-    <>
-      <div className="space-y-2 overflow-y-auto">
-        <div className="text-muted-foreground mb-3 text-xs">General</div>
-        {navItems.map((item) => {
-          const isActive = pathname === item.href
-          return (
-            <NavigationItem
-              key={item.href}
-              href={item.href}
-              title={item.title}
-              customIcon={item.icon}
-              isActive={isActive}
-              onClick={onItemClick}
-            />
-          )
-        })}
-      </div>
-    </>
+    <div className="space-y-2">
+      <div className="text-muted-foreground mb-3 text-xs">General</div>
+      {navItems.map((item) => {
+        const isActive = pathname === item.href
+        return (
+          <NavigationItem
+            key={item.href}
+            href={item.href}
+            title={item.title}
+            customIcon={item.icon}
+            isActive={isActive}
+            onClick={onItemClick}
+          />
+        )
+      })}
+    </div>
   )
 }

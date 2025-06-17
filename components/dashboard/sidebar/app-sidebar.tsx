@@ -53,7 +53,7 @@ export function AppSidebar({ projects }: { projects: Projects[] }) {
             'bg-secondary dark:bg-primary relative z-40 flex h-full w-60 flex-col gap-8 py-4 pl-2 pr-2 transition-all duration-300 ease-in-out',
             // Floating state when not pinned but hovering
             !isPinned && !isMobile && isNavVisible
-              ? 'left-0 m-2 h-[calc(100%-1rem)] rounded-md border shadow-2xl'
+              ? 'left-0 m-2 h-[calc(100%-1rem)] rounded-md shadow-2xl'
               : !isNavVisible && '-left-60',
             // Fixed position for mobile
             isMobile && isPinned && 'fixed left-0',

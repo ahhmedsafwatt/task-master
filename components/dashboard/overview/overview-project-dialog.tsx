@@ -12,8 +12,13 @@ import { useActionState, useState } from 'react'
 import { OverviewCreateProjectForm } from './overview-create-project-form'
 import { ActionResponse } from '@/lib/types/types'
 import { createProject } from '@/lib/actions/project-actions'
+import { cn } from '@/lib/utils'
 
-export const OverviewProjectsDialog = () => {
+export const OverviewProjectsDialog = ({
+  className,
+}: {
+  className?: string
+}) => {
   const [openDialog, setOpenDialog] = useState(false)
   const [createProjectResponse, createProjectAction, isPending] =
     useActionState<ActionResponse, FormData>(createProject, {
@@ -35,6 +40,7 @@ export const OverviewProjectsDialog = () => {
                 variant={'main'}
                 size={'smIcon'}
                 aria-label="Create new task"
+                className={cn('', className)}
               >
                 <Plus className="text-white" />
               </Button>

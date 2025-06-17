@@ -37,7 +37,9 @@ export async function createProject(
         errors: result.error.flatten().fieldErrors,
       }
     }
+
     const projectData = result.data
+
     const { data, error } = await supabase
       .from('projects')
       .insert({
@@ -49,19 +51,35 @@ export async function createProject(
       .select('id')
 
     if (error) {
-      console.error('Error inserting project:', error)
+      console.error('Validation failed:', error.message)
       return {
         status: 'error',
-        message: error.message || 'Failed to create project',
+        message: error.message,
+      }
+    }
+    const project_id = data?.[0]?.id
+
+    // Insert project member
+    const { error: memberError } = await supabase
+      .from('project_members')
+      .insert({ project_id, user_id: user.id, role: 'OWNER' })
+
+    if (memberError) {
+      await supabase.from('projects').delete().eq('id', project_id)
+      console.error('Validation failed:', memberError.message)
+      return {
+        status: 'error',
+        message: memberError.message,
       }
     }
 
     revalidatePath('/dashboard/overview')
+
     return {
       status: 'created',
       message: 'Project created successfully',
       data: {
-        projectId: data[0].id,
+        projectId: project_id,
       },
     }
   } catch (error) {

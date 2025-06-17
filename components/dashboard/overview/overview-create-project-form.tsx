@@ -1,7 +1,9 @@
 import { Button } from '@/components/ui/button'
 import { DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
+import { projectKeys } from '@/hooks/use-projects'
 import { ActionResponse } from '@/lib/types/types'
+import { useQueryClient } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
@@ -17,7 +19,8 @@ export const OverviewCreateProjectForm = ({
   isPending: boolean
   onSuccessAction: () => void
 }) => {
-  // Handle server action responses
+  const queryClient = useQueryClient()
+
   useEffect(() => {
     const { message, status, data, errors } = createProjectResponse
 
@@ -39,7 +42,7 @@ export const OverviewCreateProjectForm = ({
           </Link>
         ),
       })
-
+      queryClient.invalidateQueries({ queryKey: projectKeys.lists() })
       onSuccessAction()
     }
 

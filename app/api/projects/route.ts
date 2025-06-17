@@ -1,10 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createSupabaseClient } from '@/utils/supabase/server'
 
-/**
- * Returns a JSON response with a destructurable shape: { data, error }
- * This allows consumers to use: const { data, error } = await res.json()
- */
 export async function GET() {
   try {
     const supabase = await createSupabaseClient()

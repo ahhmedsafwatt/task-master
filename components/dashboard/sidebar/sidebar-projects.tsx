@@ -2,15 +2,14 @@
 import { usePathname } from 'next/navigation'
 import { NavigationItem } from './navigation-item'
 import Image from 'next/image'
-import { Plus } from 'lucide-react'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { Button } from '@/components/ui/button'
 import { Projects } from '@/lib/types/types'
+import { OverviewProjectsDialog } from '../overview/overview-project-dialog'
 
 interface SidebarProjectsProps {
   onItemClick?: () => void
@@ -24,18 +23,13 @@ export function SidebarProjects({
   const pathname = usePathname()
 
   return (
-    <div title="projects" className="flex-1 overflow-y-auto">
-      <div className="text-muted-foreground mb-3 flex items-center justify-between rounded-md p-1.5 px-2 text-xs">
+    <div className="flex min-h-0 flex-col">
+      <div className="text-muted-foreground mb-3 flex items-center justify-between rounded-md px-1.5 text-xs">
         <span>projects</span>
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button
-                variant={'inverted'}
-                className="hover:bg-secondary-foreground bg-accent-foreground box-content size-3 cursor-pointer rounded-md p-0.5 transition-colors duration-300"
-              >
-                <Plus />
-              </Button>
+              <OverviewProjectsDialog className="box-content size-3 p-0.5" />
             </TooltipTrigger>
             <TooltipContent>
               <p>Create project</p>
@@ -43,7 +37,7 @@ export function SidebarProjects({
           </Tooltip>
         </TooltipProvider>
       </div>
-      <div className="space-y-1.5">
+      <div className="space-y-1.5 overflow-y-auto">
         {projects.map((project: Projects) => {
           const isActive = pathname === `/dashboard/projects/${project.name}`
           return (
