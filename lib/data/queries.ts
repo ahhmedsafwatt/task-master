@@ -80,6 +80,51 @@ export const getProjects = cache(async (limit = 4) => {
   }
 })
 
+export const getProjectwithMembers = cache(async (limit = 4) => {
+  try {
+    const supabase = await createSupabaseClient()
+    const { data, error } = await supabase
+      .from('projects')
+      .select(
+        `
+        *,
+        project_members:project_members(
+          user_id,
+          role,
+          joined_at,
+          profiles:profiles(id, username, avatar_url)
+        )
+      `,
+      )
+      .order('created_at', { ascending: false })
+      .limit(limit)
+
+    if (error) {
+      console.error('Supabase query error:', error)
+      return { data: null, error }
+    }
+
+    // Transform project_members to flatten the profile info
+    const transformedData = data?.map((project) => ({
+      ...project,
+      project_members:
+        project.project_members?.map((member: any) => ({
+          id: member.profiles?.id,
+          username: member.profiles?.username,
+          avatar_url: member.profiles?.avatar_url,
+          created_at: member.created_at,
+          email: member.email,
+          updated_at: member.updated_at,
+        })) ?? [],
+    }))
+
+    return { data: transformedData, error: null }
+  } catch (error) {
+    console.error('Unexpected error in getProjects:', error)
+    return { data: null, error }
+  }
+})
+
 /**
  * Get all related Tasks |
  * fetches all Task from the database if you don't have rls enabled you would have to pass a user_id as a comparison value

@@ -100,90 +100,94 @@ export const TaskItem = ({ task }: { task: TasksWithAssigness }) => {
 
   return (
     <Link
-      href={`/dashboard/my-tasks/${task?.id}`}
+      href={`/dashboard/tasks/${task?.id}`}
       className="group block"
       aria-label={`View task: ${task?.title}`}
     >
-      <div className="border-border/50 bg-secondary hover:bg-accent/50 group-hover:border-border relative flex items-center justify-between rounded-lg border p-4 shadow transition-colors">
-        <div className="min-w-0 flex-1 space-y-2">
-          <div className="flex items-start justify-between gap-2">
-            <h3 className="group-hover:text-foreground truncate text-sm font-medium group-hover:underline">
-              {task?.title}
-            </h3>
-            <div className="ml-4 flex flex-shrink-0 items-center">
-              {displayedAssignees.length > 0 ? (
-                <div className="flex items-center">
-                  <div className="flex -space-x-3.5">
-                    {displayedAssignees.map((assignee) => (
-                      <TooltipProvider key={assignee.id}>
+      <div className="to-accent from-accent via-secondary rounded-xl border bg-gradient-to-r px-4 py-6 shadow-md">
+        <div className="space-y-6">
+          <div>
+            <div className="mb-2 flex items-start justify-between">
+              <h3 className="group-hover:text-foreground truncate font-medium group-hover:underline">
+                {task?.title}
+              </h3>
+              <div className="ml-4 flex flex-shrink-0 items-center">
+                {displayedAssignees.length > 0 ? (
+                  <div className="flex items-center">
+                    <div className="flex -space-x-3">
+                      {displayedAssignees.map((assignee) => (
+                        <TooltipProvider key={assignee.id}>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Avatar className="border-background relative h-7 w-7 hover:z-50">
+                                <AvatarImage
+                                  src={
+                                    assignee.avatar_url || '/placeholder.svg'
+                                  }
+                                  alt={assignee.username || 'User'}
+                                />
+                                <AvatarFallback className="text-xs">
+                                  {assignee.username?.slice(0, 1)}
+                                </AvatarFallback>
+                              </Avatar>
+                            </TooltipTrigger>
+                            <TooltipContent side="top">
+                              <p>{assignee.username || assignee.email}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      ))}
+                    </div>
+
+                    {remainingCount > 0 && (
+                      <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <Avatar className="border-background relative h-7 w-7 hover:z-50">
-                              <AvatarImage
-                                src={assignee.avatar_url || '/placeholder.svg'}
-                                alt={assignee.username || 'User'}
-                              />
-                              <AvatarFallback className="text-xs">
-                                {assignee.username?.slice(0, 1)}
-                              </AvatarFallback>
-                            </Avatar>
+                            <div className="bg-muted border-background ml-1 flex h-7 w-7 items-center justify-center rounded-full">
+                              <span className="text-muted-foreground text-xs font-medium">
+                                +{remainingCount}
+                              </span>
+                            </div>
                           </TooltipTrigger>
                           <TooltipContent side="top">
-                            <p>{assignee.username || assignee.email}</p>
+                            <p>
+                              {remainingCount} more assignee
+                              {remainingCount > 1 ? 's' : ''}
+                            </p>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
-                    ))}
+                    )}
                   </div>
-
-                  {remainingCount > 0 && (
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <div className="bg-muted border-background ml-1 flex h-7 w-7 items-center justify-center rounded-full">
-                            <span className="text-muted-foreground text-xs font-medium">
-                              +{remainingCount}
-                            </span>
-                          </div>
-                        </TooltipTrigger>
-                        <TooltipContent side="top">
-                          <p>
-                            {remainingCount} more assignee
-                            {remainingCount > 1 ? 's' : ''}
-                          </p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  )}
-                </div>
+                ) : (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className="bg-muted/50 flex h-7 w-7 items-center justify-center rounded-full">
+                          <Users size={14} className="text-muted-foreground" />
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent side="top">
+                        <p>No assignees</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
+              </div>
+            </div>
+            <div className="text-muted-foreground flex items-center text-xs">
+              {task.is_private ? (
+                <span className="bg-muted truncate rounded px-2 py-0.5 text-xs">
+                  Personal task
+                </span>
               ) : (
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div className="bg-muted/50 flex h-7 w-7 items-center justify-center rounded-full">
-                        <Users size={14} className="text-muted-foreground" />
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent side="top">
-                      <p>No assignees</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                task.project_name && (
+                  <span className="bg-muted truncate rounded px-2 py-0.5 text-xs">
+                    {task.project_name}
+                  </span>
+                )
               )}
             </div>
-          </div>
-          <div className="text-muted-foreground flex items-center text-xs">
-            {task.is_private ? (
-              <span className="bg-muted truncate rounded px-2 py-0.5 text-xs">
-                Personal task
-              </span>
-            ) : (
-              task.project_name && (
-                <span className="bg-muted truncate rounded px-2 py-0.5 text-xs">
-                  {task.project_name}
-                </span>
-              )
-            )}
           </div>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="text-muted-foreground flex flex-col gap-2 text-xs sm:flex-row sm:items-center">

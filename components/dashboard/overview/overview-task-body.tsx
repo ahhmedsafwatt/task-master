@@ -29,7 +29,7 @@ export const OverviewTasksBody = async () => {
 
   return (
     <>
-      <div className="space-y-2">
+      <div className="flex flex-col gap-6">
         {tasks?.map((task) => <TaskItem key={task.id} task={task} />)}
       </div>
       <Button asChild variant="inverted" className="mt-5 w-full">

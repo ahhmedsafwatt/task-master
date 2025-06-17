@@ -1,7 +1,10 @@
-import { getProjects } from '@/lib/data/queries'
+import { getProjectwithMembers } from '@/lib/data/queries'
+import { OverviewProjectItem } from './overview-project-item'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
 export const OverviewProjectsBody = async () => {
-  const { data: projects, error } = await getProjects()
+  const { data: projects, error } = await getProjectwithMembers()
 
   if (error) {
     return (
@@ -25,17 +28,25 @@ export const OverviewProjectsBody = async () => {
   }
 
   return (
-    <div>
-      <div className="space-y-2">
+    <>
+      <div className="flex flex-col gap-6">
         {projects?.map((project) => (
-          <div key={project.id} className="rounded border p-4">
-            <h3 className="text-lg font-semibold">{project.name}</h3>
-            <p className="text-muted-foreground text-sm">
-              {project.description}
-            </p>
-          </div>
+          <OverviewProjectItem
+            key={project.id}
+            title={project.name}
+            project_cover={
+              project.project_cover ?? '/placeholder.svg?height=32&width=32'
+            }
+            project_members={project.project_members}
+            description={project.description ?? ''}
+          />
         ))}
       </div>
-    </div>
+      <Button asChild variant="inverted" className="mt-5 w-full">
+        <Link href="/dashboard/projects">
+          View all projects ({projects?.length})
+        </Link>
+      </Button>
+    </>
   )
 }
