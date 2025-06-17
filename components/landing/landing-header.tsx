@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
 
 import { FlipingText } from '@/components/ui/fliping-text'
-import { IoLogoGithub, IoMdArrowDropup, IoIosCode } from 'react-icons/io'
+import { IoMdArrowDropup } from 'react-icons/io'
 import {
   Accordion,
   AccordionContent,

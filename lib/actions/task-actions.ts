@@ -1,14 +1,14 @@
 'use server'
 
 import { createSupabaseClient } from '@/utils/supabase/server'
-import { TaskResponse } from '../types/types'
+import { ActionResponse } from '../types/types'
 import { TaskSchema } from '../types/zod'
 import { revalidatePath } from 'next/cache'
 
 export async function createTask(
-  prevStateOrParams: TaskResponse | null,
+  prevStateOrParams: ActionResponse | null,
   formData: FormData,
-): Promise<TaskResponse> {
+): Promise<ActionResponse> {
   try {
     const supabase = await createSupabaseClient()
 

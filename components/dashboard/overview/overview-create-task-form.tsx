@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { useCreateTaskForm } from '@/hooks/use-create-task-form'
-import { TaskResponse } from '@/lib/types/types'
+import { ActionResponse } from '@/lib/types/types'
 import { Separator } from '@/components/ui/separator'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
@@ -14,14 +14,14 @@ import { cn } from '@/lib/utils'
 import { TaskAttributs } from './task-attributes'
 
 // Task form component
-export const TaskForm = ({
+export const OverviewCreateTaskForm = ({
   createTaskAction,
   isPending,
   onSuccessAction,
   createTaskResponse,
 }: {
-  createTaskResponse: TaskResponse
-  createTaskAction: any
+  createTaskResponse: ActionResponse
+  createTaskAction: (payload: FormData) => void
   isPending: boolean
   onSuccessAction: () => void
 }) => {

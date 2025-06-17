@@ -13,10 +13,8 @@ import {
 } from 'lucide-react'
 import { TaskDatePickerField } from './overview-task-date-picker'
 import { Selections } from './overview-task-selections'
-import { userProfile, Projects, createTaskFormData } from '@/lib/types/types'
-import { useState } from 'react'
+import { createTaskFormData } from '@/lib/types/types'
 import { toast } from 'sonner'
-import { useQuery } from '@tanstack/react-query'
 import { useProjects } from '@/hooks/use-projects'
 import { useProjectMembers } from '@/hooks/use-project-members'
 

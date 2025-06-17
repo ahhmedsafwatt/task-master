@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/card'
 import { ProfileAvatar } from './profile-avatar'
 import { ProfileForm } from './profile-form'
-import { getProfile } from '@/lib/server/queries'
+import { getProfile } from '@/lib/data/queries'
 import { Separator } from '@/components/ui/separator'
 import { ProfileDelete } from './profile-delete'
 

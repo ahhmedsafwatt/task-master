@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { useActionState, useEffect } from 'react'
 import { AuthResponse } from '@/lib/types/types'
-import { requestPasswordReset } from '@/lib/server/auth-actions'
+import { requestPasswordReset } from '@/lib/actions/auth-actions'
 import { toast } from 'sonner'
 
 export const ForgetPasswordComponent = () => {

@@ -7,23 +7,19 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { createTask } from '@/lib/actions/task-actions'
-import { ActionResponse } from '@/lib/types/types'
 import { Plus } from 'lucide-react'
-import { useState, useActionState } from 'react'
-import { OverviewCreateTaskForm } from './overview-create-task-form'
+import { useActionState, useState } from 'react'
+import { OverviewCreateProjectForm } from './overview-create-project-form'
+import { ActionResponse } from '@/lib/types/types'
+import { createProject } from '@/lib/actions/project-actions'
 
-// Main component
-export const OverviewTasksDialog = () => {
+export const OverviewProjectsDialog = () => {
   const [openDialog, setOpenDialog] = useState(false)
-  const [createTaskResponse, createTaskAction, isPending] = useActionState<
-    ActionResponse,
-    FormData
-  >(createTask, {
-    status: 'idle',
-    message: null,
-  })
-
+  const [createProjectResponse, createProjectAction, isPending] =
+    useActionState<ActionResponse, FormData>(createProject, {
+      status: 'idle' as const,
+      message: null,
+    })
   const handleSuccess = () => {
     setOpenDialog(false)
   }
@@ -35,23 +31,22 @@ export const OverviewTasksDialog = () => {
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
+                onClick={() => setOpenDialog(true)}
                 variant={'main'}
                 size={'smIcon'}
-                disabled={isPending}
-                onClick={() => setOpenDialog(true)}
                 aria-label="Create new task"
               >
                 <Plus className="text-white" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Create new task</TooltipContent>
+            <TooltipContent>Create new Project</TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </DialogTrigger>
-      <DialogContent className="dark:bg-secondary bg-background max-h-[calc(100%-3rem)] w-full gap-0 overflow-auto md:max-h-[calc(100%-1.5rem)] md:max-w-3xl lg:max-w-5xl">
-        <OverviewCreateTaskForm
-          createTaskResponse={createTaskResponse}
-          createTaskAction={createTaskAction}
+      <DialogContent>
+        <OverviewCreateProjectForm
+          createProjectAction={createProjectAction}
+          createProjectResponse={createProjectResponse}
           isPending={isPending}
           onSuccessAction={handleSuccess}
         />

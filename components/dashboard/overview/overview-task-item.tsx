@@ -104,7 +104,7 @@ export const TaskItem = ({ task }: { task: TasksWithAssigness }) => {
       className="group block"
       aria-label={`View task: ${task?.title}`}
     >
-      <div className="border-border/50 bg-card hover:bg-accent/50 group-hover:border-border relative flex items-center justify-between rounded-lg border p-4 transition-colors">
+      <div className="border-border/50 bg-secondary hover:bg-accent/50 group-hover:border-border relative flex items-center justify-between rounded-lg border p-4 shadow transition-colors">
         <div className="min-w-0 flex-1 space-y-2">
           <div className="flex items-start justify-between gap-2">
             <h3 className="group-hover:text-foreground truncate text-sm font-medium group-hover:underline">

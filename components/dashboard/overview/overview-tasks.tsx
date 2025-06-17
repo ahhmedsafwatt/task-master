@@ -1,6 +1,6 @@
 import { OverViewCard } from './overview-card'
-import { OverViewTasksBody } from './overview-task-body'
-import { OverViewTasksDialog } from './overview-task-dialog'
+import { OverviewTasksBody } from './overview-task-body'
+import { OverviewTasksDialog } from './overview-task-dialog'
 import { Suspense } from 'react'
 import { CardsSkeleton } from './overview-skeletons'
 
@@ -8,13 +8,13 @@ export async function OverViewTasks() {
   return (
     <OverViewCard
       title="Tasks"
-      className="dark:bg-secondary bg-accent"
+      className="col-span-2"
       bodyChildren={
         <Suspense fallback={<CardsSkeleton />}>
-          <OverViewTasksBody />
+          <OverviewTasksBody />
         </Suspense>
       }
-      headerChildren={<OverViewTasksDialog />}
+      headerChildren={<OverviewTasksDialog />}
     />
   )
 }

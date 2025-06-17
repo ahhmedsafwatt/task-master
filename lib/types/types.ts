@@ -8,12 +8,13 @@ export interface AuthResponse {
   redirectTo?: string
 }
 
-export interface TaskResponse {
+export interface ActionResponse {
   status: 'error' | 'created' | 'updated' | 'deleted' | 'idle'
   message: string | null
   errors?: Record<string, string[]>
   data?: {
     taskId?: string
+    projectId?: string
   }
 }
 

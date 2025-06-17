@@ -1,7 +1,6 @@
 'use client'
 import { cn } from '@/lib/utils'
 import { useRef } from 'react'
-import { Separator } from '@/components/ui/separator'
 import { useSidebar } from '@/hooks/use-sidebar'
 import { SidebarNavigation } from './sidebar-navigation'
 import { SidebarProjects } from './sidebar-projects'

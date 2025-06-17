@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { DeleteProfile } from '@/lib/server/profile-actions'
+import { DeleteProfile } from '@/lib/actions/profile-actions'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import Image from 'next/image'

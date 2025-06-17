@@ -11,7 +11,7 @@ import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { UserProfileCard } from './user-profile-card'
 import { SignOut } from '@/components/auth/signout'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { getProfile } from '@/lib/server/queries'
+import { getProfile } from '@/lib/data/queries'
 import Link from 'next/link'
 
 export const NavUser = async () => {

@@ -17,7 +17,7 @@ export const navItems: NavItem[] = [
   },
   {
     title: 'Tasks',
-    href: '/dashboard/my-tasks',
+    href: '/dashboard/tasks',
     icon: <LucideClipboardCheck size={18} />,
   },
 

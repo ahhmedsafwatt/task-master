@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Camera } from 'lucide-react'
-import { updateAvatar } from '@/lib/server/profile-actions'
+import { updateAvatar } from '@/lib/actions/profile-actions'
 import { toast } from 'sonner'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'

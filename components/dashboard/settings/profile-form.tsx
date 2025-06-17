@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react'
-import { updateUsername } from '@/lib/server/profile-actions'
+import { updateUsername } from '@/lib/actions/profile-actions'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'

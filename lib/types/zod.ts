@@ -58,9 +58,6 @@ export const signupSchema = z.object({
     .trim(),
 })
 
-export type LoginFormData = z.infer<typeof loginSchema>
-export type SignupFormData = z.infer<typeof signupSchema>
-
 // Define Zod schema for task creation
 export const TaskSchema = z
   .object({
@@ -120,5 +117,14 @@ export const TaskSchema = z
     },
   )
 
+export const ProjectSchema = z.object({
+  name: z.string().min(1, 'project name is required'),
+  project_cover: z.string().optional(),
+  description: z.string().optional(),
+})
+
 // Infer the type from the schema for TypeScript
+export type LoginFormData = z.infer<typeof loginSchema>
+export type SignupFormData = z.infer<typeof signupSchema>
 export type TaskInput = z.infer<typeof TaskSchema>
+export type ProjectInput = z.infer<typeof ProjectSchema>

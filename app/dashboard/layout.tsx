@@ -1,6 +1,6 @@
 import { AppSidebar } from '@/components/dashboard/sidebar/app-sidebar'
 import { DashboardHeader } from '@/components/dashboard/sidebar/dashboard-header'
-import { getProjects } from '@/lib/server/queries'
+import { getProjects } from '@/lib/data/queries'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -13,7 +13,7 @@ export default async function Layout({
 }: {
   children: React.ReactNode
 }) {
-  const projects = await getProjects()
+  const projects = await getProjects(100)
   if (!projects.data) return null
 
   return (
