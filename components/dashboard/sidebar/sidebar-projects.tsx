@@ -10,7 +10,6 @@ import {
 } from '@/components/ui/tooltip'
 import { Projects } from '@/lib/types/types'
 import { OverviewProjectsDialog } from '../overview/overview-project-dialog'
-import { div } from 'motion/react-m'
 
 interface SidebarProjectsProps {
   onItemClick?: () => void
