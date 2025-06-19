@@ -34,9 +34,7 @@ export const OverviewProjectsBody = async () => {
           <OverviewProjectItem
             key={project.id}
             title={project.name}
-            project_cover={
-              project.project_cover ?? '/placeholder.svg?height=32&width=32'
-            }
+            project_cover={project.project_cover!}
             project_members={project.project_members}
             description={project.description ?? ''}
           />

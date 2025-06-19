@@ -5,17 +5,22 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Check, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
+import { cn } from '@/lib/utils'
 
 interface UrlInputProps {
   onUrlSelect: (url: string) => void
   hideLabels?: boolean
   className?: string
   id?: string
+  inputclassName?: string
+  buttonClassName?: string
 }
 
 export const UrlInput = ({
   onUrlSelect,
   hideLabels = false,
+  inputclassName,
+  buttonClassName,
   className,
   id = 'url-input',
 }: UrlInputProps) => {
@@ -47,20 +52,22 @@ export const UrlInput = ({
   }
 
   return (
-    <div className={className}>
+    <div className={cn(className)}>
       {!hideLabels && <Label htmlFor={id}>Image URL</Label>}
       <div className="flex gap-2">
         <Input
           id={id}
+          name={id}
           type="url"
           value={urlInput}
           onChange={(e) => setUrlInput(e.target.value)}
           placeholder="https://example.com/image.jpg"
-          className="flex-1"
+          className={cn('flex-1', inputclassName)}
         />
         <Button
           onClick={handleUrlPreview}
           disabled={isLoadingUrl || !urlInput.trim()}
+          className={cn(buttonClassName)}
         >
           {isLoadingUrl ? (
             <Loader2 className="h-4 w-4 animate-spin" />

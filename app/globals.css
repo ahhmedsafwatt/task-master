@@ -178,18 +178,22 @@
     @apply bg-background text-foreground;
   }
 
+  /* Default selection style for the entire app (orange) */
   ::selection {
-    background: #b34522;
+    background: #373b67;
     color: #fff;
   }
 
+  /* Dashboard container */
   .dashboard {
     scrollbar-width: none;
   }
 
-  section.dashboard ::selection {
-    background: #373b67 !important;
-    color: #fff !important;
+  /* Selection style for dashboard sections */
+  .landing ::selection,
+  div.landing ::selection {
+    background: #b34522;
+    color: #fff;
   }
 }
 

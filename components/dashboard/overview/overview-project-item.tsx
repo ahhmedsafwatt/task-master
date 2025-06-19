@@ -69,7 +69,7 @@ export function OverviewProjectItem({
                     <TooltipTrigger asChild>
                       <Avatar className="border-background relative h-7 w-7 hover:z-50">
                         <AvatarImage
-                          src={member.avatar_url || '/placeholder.svg'}
+                          src={member.avatar_url!}
                           alt={member.username || 'User'}
                         />
                         <AvatarFallback className="text-xs">

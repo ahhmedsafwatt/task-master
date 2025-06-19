@@ -54,6 +54,7 @@ export const FileInput = ({
       <Input
         id={id}
         type="file"
+        name={id}
         ref={fileInputRef}
         onChange={handleFileChange}
         accept={acceptedTypes.join(',')}

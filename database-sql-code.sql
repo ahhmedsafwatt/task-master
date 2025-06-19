@@ -738,8 +738,8 @@ values
     array['image/jpeg', 'image/png', 'image/webp']
   ),
   (
-    'task_attachments',
-    'task_attachments',
+    'task-attachments',
+    'task-attachments',
     false,
     false,
     null,
@@ -790,90 +790,65 @@ create policy "Users can delete their own avatars" on storage.objects for DELETE
 );
 
 -- 2. PROJECT COVERS BUCKET POLICIES
--- Project members can view project covers (follows your project RLS)
-create policy "Project members can view project covers" on storage.objects for
-select
-  using (
-    bucket_id = 'project_covers'
-    and exists (
-      select
-        1
-      from
-        public.project_members pm
-        join public.projects p on pm.project_id = p.id
-      where
-        pm.user_id = auth.uid ()
-        and (storage.foldername (name)) [1] = p.id::text
-    )
-  );
+-- 1. VIEW POLICY: Project members can view project covers
+create policy "Project members can view project covers" 
+on storage.objects 
+for select
+using (bucket_id = 'project-covers');
 
--- Project creators and admins can upload project covers
-create policy "Project creators and admins can upload project covers" on storage.objects for INSERT
-with
-  check (
-    bucket_id = 'project_covers'
-    and exists (
-      select
-        1
-      from
-        public.projects p
-        left join public.project_members pm on p.id = pm.project_id
-        and pm.user_id = auth.uid ()
-      where
-        (storage.foldername (name)) [1] = p.id::text
-        and (
-          p.creator_id = auth.uid ()
-          or pm.role = 'ADMIN'
-        )
-    )
-  );
-
--- Project creators and admins can update project covers
-create policy "Project creators and admins can update project covers" on storage.objects
-for update
-  using (
-    bucket_id = 'project_covers'
-    and exists (
-      select
-        1
-      from
-        public.projects p
-        left join public.project_members pm on p.id = pm.project_id
-        and pm.user_id = auth.uid ()
-      where
-        (storage.foldername (name)) [1] = p.id::text
-        and (
-          p.creator_id = auth.uid ()
-          or pm.role = 'ADMIN'
-        )
-    )
-  );
-
--- Project creators and admins can delete project covers
-create policy "Project creators and admins can delete project covers" on storage.objects for DELETE using (
-  bucket_id = 'project_covers'
+-- 2. INSERT POLICY: Project creators and admins/owners can upload project covers
+create policy "Project creators and admins/owners can upload project covers" 
+on storage.objects 
+for insert
+with check (
+  bucket_id = 'project-covers'
   and exists (
-    select
-      1
-    from
-      public.projects p
-      left join public.project_members pm on p.id = pm.project_id
-      and pm.user_id = auth.uid ()
-    where
-      (storage.foldername (name)) [1] = p.id::text
-      and (
-        p.creator_id = auth.uid ()
-        or pm.role = 'ADMIN'
-      )
+    select 1
+    from project_members pm
+    join projects p on pm.project_id = p.id
+    where pm.user_id = auth.uid()
+      and (storage.foldername(objects.name))[1] = p.id::text
+      and pm.role in ('ADMIN', 'OWNER')
   )
 );
 
+-- 3. UPDATE POLICY: Project creators and admins/owners can update project covers
+create policy "Project creators and admins/owners can update project covers" 
+on storage.objects 
+for update
+using (
+  bucket_id = 'project-covers'
+  and exists (
+    select 1
+    from project_members pm
+    join projects p on pm.project_id = p.id
+    where pm.user_id = auth.uid()
+      and (storage.foldername(objects.name))[1] = p.id::text
+      and pm.role in ('ADMIN', 'OWNER')
+  )
+);
+
+-- 4. DELETE POLICY: Project creators and admins/owners can delete project covers
+create policy "Project creators and admins/owners can delete project covers" 
+on storage.objects 
+for delete
+using (
+  bucket_id = 'project-covers'
+  and exists (
+    select 1
+    from project_members pm
+    join projects p on pm.project_id = p.id
+    where pm.user_id = auth.uid()
+      and (storage.foldername(objects.name))[1] = p.id::text
+      and pm.role in ('ADMIN', 'OWNER')
+  )
+));
 -- 3. TASK ATTACHMENTS BUCKET POLICIES
 -- Task attachments follow the same visibility rules as tasks
 create policy "Users can view task attachments for accessible tasks" on storage.objects for
 select
   using (
-    bucket_id = 'task_attachments'
+    bucket_id = 'task-attachments'
     and exists (
       select
         1
@@ -896,7 +871,7 @@ select
 create policy "Task creators and assignees can upload attachments" on storage.objects for INSERT
 with
   check (
-    bucket_id = 'task_attachments'
+    bucket_id = 'task-attachments'
     and exists (
       select
         1
@@ -917,7 +892,7 @@ with
 create policy "Task creators or project admins can update attachments" on storage.objects
 for update
   using (
-    bucket_id = 'task_attachments'
+    bucket_id = 'task-attachments'
     and exists (
       select
         1
@@ -938,17 +913,17 @@ for update
 
 -- Only task creators or project admins can delete task attachments
 create policy "Task creators or project admins can delete attachments" on storage.objects for DELETE using (
-  bucket_id = 'task_attachments'
+  bucket_id = 'task-attachments'
   and exists (
     select
       1
     from
       public.tasks t
       left join public.projects p on t.project_id = p.id
-      left join public.project_members pm on p.id = pm.project_id
-      and pm.user_id = auth.uid ()
-      and pm.role = 'ADMIN'
-    where
+        left join public.project_members pm on p.id = pm.project_id
+        and pm.user_id = auth.uid ()
+        and pm.role = 'ADMIN'
+      where
       (storage.foldername (name)) [1] = t.id::text
       and (
         t.creator_id = auth.uid ()
@@ -970,7 +945,7 @@ create policy "Task creators or project admins can delete attachments" on storag
 --    └── {project_id}/
 --        └── cover.jpg
 --
--- 3. task_attachments/
+-- 3. task-attachments/
 --    └── {task_id}/
 --        ├── document.pdf
 --        ├── image.png

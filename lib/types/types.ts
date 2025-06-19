@@ -14,6 +14,7 @@ export interface ActionResponse {
   errors?: Record<string, string[]>
   data?: {
     taskId?: string
+    project?: string
     projectId?: string
   }
 }

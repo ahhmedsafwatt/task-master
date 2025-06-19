@@ -74,7 +74,7 @@ export function LandingHeader() {
                         <Link
                           href={href}
                           className={cn(
-                            'font-geist-mono text-muted-foreground hover:text-primary-foreground text-sm font-medium transition-colors',
+                            'font-geist-mono text-muted-foreground hover:text-primary-foreground font-medium transition-colors',
                             {
                               'text-gray-300 hover:text-white':
                                 hasScrolled || isMenuOpen,
@@ -96,7 +96,7 @@ export function LandingHeader() {
                   >
                     <span
                       className={cn(
-                        'font-geist-mono text-muted-foreground hover:text-primary-foreground flex cursor-pointer items-center gap-1 text-sm font-medium transition-colors',
+                        'font-geist-mono text-muted-foreground hover:text-primary-foreground flex cursor-pointer items-center gap-1 font-medium transition-colors',
                         {
                           'text-gray-300 hover:text-white':
                             hasScrolled || isMenuOpen,

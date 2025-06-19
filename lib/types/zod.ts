@@ -119,8 +119,8 @@ export const TaskSchema = z
 
 export const ProjectSchema = z.object({
   name: z.string().min(1, 'project name is required'),
-  project_cover: z.string().optional(),
-  description: z.string().optional(),
+  project_cover: z.string().nullable().optional(),
+  description: z.string().nullable().optional(),
 })
 
 // Infer the type from the schema for TypeScript

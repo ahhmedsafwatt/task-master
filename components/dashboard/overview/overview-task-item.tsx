@@ -121,9 +121,7 @@ export const TaskItem = ({ task }: { task: TasksWithAssigness }) => {
                             <TooltipTrigger asChild>
                               <Avatar className="border-background relative h-7 w-7 hover:z-50">
                                 <AvatarImage
-                                  src={
-                                    assignee.avatar_url || '/placeholder.svg'
-                                  }
+                                  src={assignee.avatar_url!}
                                   alt={assignee.username || 'User'}
                                 />
                                 <AvatarFallback className="text-xs">
