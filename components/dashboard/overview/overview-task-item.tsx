@@ -11,7 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import type { Enums } from '@/lib/types/database.types'
 import { TasksWithAssigness } from '@/lib/types/types'
 import { cn } from '@/lib/utils'
-import { Calendar, Users } from 'lucide-react'
+import { Box, Calendar, CalendarClock, Users } from 'lucide-react'
 import Link from 'next/link'
 import { useMemo } from 'react'
 import { format, formatDistanceToNow, isPast } from 'date-fns'
@@ -173,14 +173,15 @@ export const TaskItem = ({ task }: { task: TasksWithAssigness }) => {
                 )}
               </div>
             </div>
-            <div className="text-muted-foreground flex items-center text-xs">
+            <div className="text-muted-foreground flex items-center gap-1 text-xs">
+              <Box className="h-4 w-4" />
               {task.is_private ? (
                 <span className="bg-muted rounded px-2 py-0.5 text-xs">
                   Personal task
                 </span>
               ) : (
                 task.project_name && (
-                  <span className="bg-muted rounded px-2 py-0.5 text-xs">
+                  <span className="bg-muted line-clamp-1 rounded px-2 py-0.5 text-xs">
                     {task.project_name}
                   </span>
                 )
@@ -213,10 +214,11 @@ export const TaskItem = ({ task }: { task: TasksWithAssigness }) => {
                   </TooltipProvider>
                 ) : (
                   <div
-                    className={cn({
+                    className={cn('flex items-center gap-1', {
                       'text-destructive': isPast(new Date(task.end_date)),
                     })}
                   >
+                    <CalendarClock className="text-muted-foreground h-4 w-4" />
                     <span>
                       {format(new Date(task.due_date), 'MMM dd, yyyy')}
                     </span>
@@ -228,7 +230,12 @@ export const TaskItem = ({ task }: { task: TasksWithAssigness }) => {
                 ))}
 
               {formattedCreatedDate && (
-                <span>Created {formattedCreatedDate}</span>
+                <div className="flex items-center gap-1">
+                  <Calendar className="text-muted-foreground h-4 w-4" />
+                  <p className="text-muted-foreground text-xs">
+                    Created {formattedCreatedDate}
+                  </p>
+                </div>
               )}
             </div>
             <div className="flex flex-wrap items-center gap-2">

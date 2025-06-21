@@ -87,11 +87,11 @@ export const OverviewCreateProjectForm = ({
       action={handleSubmit}
       className="flex flex-col justify-start gap-4"
     >
-      <DialogTitle className="font-geist-mono text-lg font-semibold">
+      <DialogTitle className="font-geist-mono text-base font-semibold md:text-lg">
         Create New Project
       </DialogTitle>
       <div className="flex items-center justify-between">
-        <div className="relative h-20 w-32 overflow-hidden rounded-lg">
+        <div className="relative h-16 w-24 overflow-hidden rounded-lg md:h-24 md:w-40">
           <Popover>
             <PopoverTrigger asChild>
               <Avatar className="size-full rounded-none p-0">
@@ -108,8 +108,7 @@ export const OverviewCreateProjectForm = ({
             <PopoverContent
               align="start"
               sideOffset={14}
-              side="right"
-              className="bg-card flex h-48 w-full max-w-sm flex-col gap-5 py-6"
+              className="bg-card flex h-48 w-72 max-w-sm flex-col gap-5 py-6 md:w-96"
             >
               <FileInput
                 onFileSelect={(file) => {
@@ -146,7 +145,7 @@ export const OverviewCreateProjectForm = ({
           name="name"
           placeholder="Project Title"
           className={cn(
-            `font-geist-mono text-2xl! h-full border-none font-semibold shadow-none focus-visible:ring-0`,
+            `font-geist-mono h-full border-none text-lg font-semibold shadow-none focus-visible:ring-0 md:text-2xl`,
             createProjectResponse.errors?.name &&
               'placeholder:text-destructive animate-shake',
           )}
@@ -156,7 +155,7 @@ export const OverviewCreateProjectForm = ({
       <Input
         name="description"
         placeholder="Project Description"
-        className="font-geist-mono text-lg! h-full border-none px-0 py-2 font-semibold shadow-none focus-visible:ring-0"
+        className="font-geist-mono h-full border-none px-0 py-2 text-sm font-semibold shadow-none focus-visible:ring-0 md:text-lg"
         autoComplete="off"
       />
 

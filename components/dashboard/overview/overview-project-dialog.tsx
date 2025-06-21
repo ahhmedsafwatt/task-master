@@ -49,7 +49,7 @@ export const OverviewProjectsDialog = ({
           </Tooltip>
         </TooltipProvider>
       </DialogTrigger>
-      <DialogContent className="dark:bg-secondary bg-background md:max-w-3xl lg:max-w-5xl">
+      <DialogContent className="dark:bg-secondary bg-background -translate-y-full md:max-w-3xl lg:max-w-5xl">
         <OverviewCreateProjectForm
           createProjectAction={createProjectAction}
           createProjectResponse={createProjectResponse}

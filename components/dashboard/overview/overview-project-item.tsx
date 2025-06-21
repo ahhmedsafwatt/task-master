@@ -72,6 +72,10 @@ export function OverviewProjectItem({
           </div>
           {/* Members */}
           <div className="flex items-center justify-between gap-2 border-t pt-2">
+            <div className="flex items-center gap-2">
+              <Calendar className="text-muted-foreground h-4 w-4" />
+              <p className="text-muted-foreground text-xs">{formattedDate}</p>
+            </div>
             {project_members.length > 0 && (
               <div className="flex -space-x-3">
                 {project_members.slice(0, 3).map((member) => (
@@ -103,10 +107,6 @@ export function OverviewProjectItem({
                 )}
               </div>
             )}
-            <div className="flex items-center gap-2">
-              <Calendar className="text-muted-foreground h-4 w-4" />
-              <p className="text-muted-foreground text-xs">{formattedDate}</p>
-            </div>
           </div>
         </div>
       </div>
