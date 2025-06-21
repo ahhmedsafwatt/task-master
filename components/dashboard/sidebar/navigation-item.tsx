@@ -2,8 +2,6 @@ import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { ReactNode } from 'react'
 
-// Create a more specific type for icons that can accept props like size and className
-
 interface NavigationItemProps {
   href: string
   customIcon?: ReactNode

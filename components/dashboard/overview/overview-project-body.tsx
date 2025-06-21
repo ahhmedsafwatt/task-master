@@ -28,21 +28,22 @@ export const OverviewProjectsBody = async () => {
   }
 
   return (
-    <>
+    <div className="flex h-full flex-col justify-between">
       <div className="flex flex-col gap-6">
         {projects?.map((project) => (
           <OverviewProjectItem
             key={project.id}
             title={project.name}
-            project_cover={project.project_cover!}
             project_members={project.project_members}
             description={project.description ?? ''}
+            createdAt={project.created_at}
+            project_cover={project.project_cover ?? ''}
           />
         ))}
       </div>
       <Button asChild variant="inverted" className="mt-5 w-full">
         <Link href="/dashboard/projects">View all projects</Link>
       </Button>
-    </>
+    </div>
   )
 }

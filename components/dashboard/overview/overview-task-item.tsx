@@ -108,7 +108,7 @@ export const TaskItem = ({ task }: { task: TasksWithAssigness }) => {
         <div className="space-y-6">
           <div>
             <div className="mb-2 flex items-start justify-between">
-              <h3 className="group-hover:text-foreground truncate font-medium group-hover:underline">
+              <h3 className="text-foreground line-clamp-1 text-xl font-bold transition-all duration-300 group-hover:text-blue-400 group-hover:underline">
                 {task?.title}
               </h3>
               <div className="ml-4 flex flex-shrink-0 items-center">
@@ -175,12 +175,12 @@ export const TaskItem = ({ task }: { task: TasksWithAssigness }) => {
             </div>
             <div className="text-muted-foreground flex items-center text-xs">
               {task.is_private ? (
-                <span className="bg-muted truncate rounded px-2 py-0.5 text-xs">
+                <span className="bg-muted rounded px-2 py-0.5 text-xs">
                   Personal task
                 </span>
               ) : (
                 task.project_name && (
-                  <span className="bg-muted truncate rounded px-2 py-0.5 text-xs">
+                  <span className="bg-muted rounded px-2 py-0.5 text-xs">
                     {task.project_name}
                   </span>
                 )
