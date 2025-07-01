@@ -1,37 +1,56 @@
 import 'server-only'
 import { createSupabaseClient } from '@/utils/supabase/server'
 import { cache } from 'react'
+import { ErrorHandler, type AppError } from '@/lib/utils/error-handler'
+import type { Tables } from '@/lib/types/database.types'
+
+// Consistent response type for all queries
+export type QueryResponse<T> = {
+  data: T | null
+  error: AppError | null
+  count?: number
+}
 
 /**
  * Get Profile data
  * fetches the user profile data from the database
  */
-export const getProfile = cache(async () => {
+export const getProfile = cache(async (): Promise<QueryResponse<any>> => {
   try {
     const supabase = await createSupabaseClient()
     const { data: userData, error: userError } =
       await supabase.auth.getSession()
 
-    if (userError && !userData.session) {
-      console.error('User error:', userError)
-      return { data: null, error: userError }
+    if (userError || !userData.session) {
+      const appError = ErrorHandler.createError(
+        'AUTH_ERROR',
+        'User not authenticated',
+        userError,
+        'getProfile'
+      )
+      ErrorHandler.logError(appError)
+      return { data: null, error: appError }
     }
 
     const { data, error } = await supabase
       .from('profiles')
-      .select()
-      .eq('id', userData.session?.user.id as string)
+      .select('*')
+      .eq('id', userData.session.user.id)
       .single()
 
     if (error) {
-      console.error('Profile fetch error:', error)
-      return { data: null, error }
+      const appError = ErrorHandler.handleSupabaseError(
+        error,
+        'getProfile',
+        userData.session.user.id
+      )
+      return { data: null, error: appError }
     }
 
     return { data, error: null }
   } catch (error) {
-    console.error('Get profile error:', error)
-    return { data: null, error: { message: 'Failed to fetch profile', error } }
+    const appError = ErrorHandler.handleUnknownError(error, 'getProfile')
+    return { data: null, error: appError }
   }
 })
 
@@ -50,140 +69,352 @@ export const getUser = cache(async () => {
 
     return data.user
   } catch (error) {
-    console.error('Get session error:', error)
-    return { data: null, error }
+    const appError = ErrorHandler.handleUnknownError(error, 'getUser')
+    ErrorHandler.logError(appError)
+    return null
   }
 })
 
 /**
- * Get all related Project |
- * fetches all projects from the database if you don't have rls enabled you would have to pass a user_id as a comparison value
+ * Get all related Projects with improved error handling and pagination
  */
-export const getProjects = cache(async (limit = 4) => {
-  try {
-    const supabase = await createSupabaseClient()
-    const { data, error } = await supabase
-      .from('projects')
-      .select()
-      .order('created_at', { ascending: false })
-      .limit(limit)
-
-    if (error) {
-      console.error('Supabase query error:', error)
-      return { data: null, error }
-    }
-
-    return { data, error: null }
-  } catch (error) {
-    console.error('Unexpected error in getProjects:', error)
-    return { data: null, error }
-  }
-})
-
-export const getProjectwithMembers = cache(async (limit = 4) => {
-  try {
-    const supabase = await createSupabaseClient()
-    const { data, error } = await supabase
-      .from('projects')
-      .select(
-        `
-        *,
-        project_members:project_members(
-          user_id,
-          role,
-          joined_at,
-          profiles:profiles(id, username, avatar_url)
+export const getProjects = cache(
+  async (limit = 4, offset = 0): Promise<QueryResponse<any[]>> => {
+    try {
+      const supabase = await createSupabaseClient()
+      const user = await getUser()
+      
+      if (!user) {
+        const appError = ErrorHandler.createError(
+          'AUTH_ERROR',
+          'User not authenticated',
+          null,
+          'getProjects'
         )
-      `,
-      )
-      .order('created_at', { ascending: false })
-      .limit(limit)
+        return { data: null, error: appError }
+      }
 
-    if (error) {
-      console.error('Supabase query error:', error)
-      return { data: null, error }
+      const query = supabase
+        .from('projects')
+        .select('*', { count: 'exact' })
+        .order('created_at', { ascending: false })
+        .range(offset, offset + limit - 1)
+
+      const { data, error, count } = await query
+
+      if (error) {
+        const appError = ErrorHandler.handleSupabaseError(
+          error,
+          'getProjects',
+          user.id
+        )
+        return { data: null, error: appError }
+      }
+
+      return { data: data || [], error: null, count: count || 0 }
+    } catch (error) {
+      const appError = ErrorHandler.handleUnknownError(error, 'getProjects')
+      return { data: null, error: appError }
     }
+  }
+)
 
-    // Transform project_members to flatten the profile info
-    const transformedData = data?.map((project) => ({
-      ...project,
-      project_members:
-        project.project_members?.map((member: any) => ({
+/**
+ * Get projects with members using optimized query with proper joins
+ */
+export const getProjectsWithMembers = cache(
+  async (limit = 4, offset = 0): Promise<QueryResponse<any[]>> => {
+    try {
+      const supabase = await createSupabaseClient()
+      const user = await getUser()
+      
+      if (!user) {
+        const appError = ErrorHandler.createError(
+          'AUTH_ERROR',
+          'User not authenticated',
+          null,
+          'getProjectsWithMembers'
+        )
+        return { data: null, error: appError }
+      }
+
+      const { data, error, count } = await supabase
+        .from('projects')
+        .select(`
+          *,
+          project_members!inner(
+            user_id,
+            role,
+            joined_at,
+            profiles!inner(
+              id,
+              username,
+              avatar_url,
+              email
+            )
+          )
+        `, { count: 'exact' })
+        .order('created_at', { ascending: false })
+        .range(offset, offset + limit - 1)
+
+      if (error) {
+        const appError = ErrorHandler.handleSupabaseError(
+          error,
+          'getProjectsWithMembers',
+          user.id
+        )
+        return { data: null, error: appError }
+      }
+
+             // Transform the data to flatten the nested structure
+       const transformedData = data?.map((project: any) => ({
+        ...project,
+        project_members: project.project_members?.map((member: any) => ({
           id: member.profiles?.id,
           username: member.profiles?.username,
           avatar_url: member.profiles?.avatar_url,
-          created_at: member.created_at,
-          email: member.email,
-          updated_at: member.updated_at,
+          email: member.profiles?.email,
+          role: member.role,
+          joined_at: member.joined_at,
         })) ?? [],
-    }))
+      })) || []
 
-    return { data: transformedData, error: null }
-  } catch (error) {
-    console.error('Unexpected error in getProjects:', error)
-    return { data: null, error }
-  }
-})
-
-/**
- * Get all related Tasks |
- * fetches all Task from the database if you don't have rls enabled you would have to pass a user_id as a comparison value
- */
-export const getTasks = cache(async (limit = 4) => {
-  try {
-    const supabase = await createSupabaseClient()
-    const { data, error } = await supabase
-      .from('tasks')
-      .select()
-      .order('created_at', { ascending: false })
-      .limit(limit)
-
-    if (error) {
-      console.error('Supabase query error:', error)
-      return { data: null, error }
+      return { data: transformedData, error: null, count: count || 0 }
+    } catch (error) {
+      const appError = ErrorHandler.handleUnknownError(error, 'getProjectsWithMembers')
+      return { data: null, error: appError }
     }
-
-    return { data, error: null }
-  } catch (error) {
-    console.error('Unexpected error in getTasks:', error)
-    return { data: null, error }
   }
-})
+)
+
 /**
- * Get all related Task Assingees |
- * fetches all Task Assignees from the database
- * Argus: task_id - the id of the task to get assignees for
+ * Get tasks with improved filtering and pagination
  */
-export const getTaskAssignees = cache(async (limit = 4) => {
-  try {
-    const supabase = await createSupabaseClient()
-    const { data, error } = await supabase
-      .from('tasks')
-      .select(
-        `
-        *,
-        assignees:task_assignees(
-          profiles:profiles(*)
+export const getTasks = cache(
+  async (
+    limit = 4, 
+    offset = 0, 
+    filters?: {
+      status?: string
+      priority?: string
+      project_id?: string
+      is_private?: boolean
+    }
+  ): Promise<QueryResponse<any[]>> => {
+    try {
+      const supabase = await createSupabaseClient()
+      const user = await getUser()
+      
+      if (!user) {
+        const appError = ErrorHandler.createError(
+          'AUTH_ERROR',
+          'User not authenticated',
+          null,
+          'getTasks'
         )
-      `,
-      )
-      .order('created_at', { ascending: false })
-      .limit(limit)
+        return { data: null, error: appError }
+      }
 
-    if (error) {
-      console.error('Supabase query error:', error)
-      return { data: null, error }
+      let query = supabase
+        .from('tasks')
+        .select('*', { count: 'exact' })
+        .order('created_at', { ascending: false })
+
+      // Apply filters
+      if (filters?.status) {
+        query = query.eq('status', filters.status)
+      }
+      if (filters?.priority) {
+        query = query.eq('priority', filters.priority)
+      }
+      if (filters?.project_id) {
+        query = query.eq('project_id', filters.project_id)
+      }
+      if (filters?.is_private !== undefined) {
+        query = query.eq('is_private', filters.is_private)
+      }
+
+      const { data, error, count } = await query.range(offset, offset + limit - 1)
+
+      if (error) {
+        const appError = ErrorHandler.handleSupabaseError(
+          error,
+          'getTasks',
+          user.id
+        )
+        return { data: null, error: appError }
+      }
+
+      return { data: data || [], error: null, count: count || 0 }
+    } catch (error) {
+      const appError = ErrorHandler.handleUnknownError(error, 'getTasks')
+      return { data: null, error: appError }
     }
-
-    // Transform the data to match the expected format
-    const transformedData = data?.map((task) => ({
-      ...task,
-      assignees: task.assignees.map((a: any) => a.profiles),
-    }))
-
-    return { data: transformedData, error: null }
-  } catch (error) {
-    console.error('Unexpected error in getTasks:', error)
-    return { data: null, error }
   }
-})
+)
+
+/**
+ * Get tasks with assignees using optimized query
+ */
+export const getTasksWithAssignees = cache(
+  async (limit = 4, offset = 0): Promise<QueryResponse<any[]>> => {
+    try {
+      const supabase = await createSupabaseClient()
+      const user = await getUser()
+      
+      if (!user) {
+        const appError = ErrorHandler.createError(
+          'AUTH_ERROR',
+          'User not authenticated',
+          null,
+          'getTasksWithAssignees'
+        )
+        return { data: null, error: appError }
+      }
+
+      const { data, error, count } = await supabase
+        .from('tasks')
+        .select(`
+          *,
+          task_assignees!left(
+            user_id,
+            assigned_at,
+            profiles!inner(
+              id,
+              username,
+              avatar_url,
+              email
+            )
+          )
+        `, { count: 'exact' })
+        .order('created_at', { ascending: false })
+        .range(offset, offset + limit - 1)
+
+      if (error) {
+        const appError = ErrorHandler.handleSupabaseError(
+          error,
+          'getTasksWithAssignees',
+          user.id
+        )
+        return { data: null, error: appError }
+      }
+
+             // Transform the data to flatten assignees
+       const transformedData = data?.map((task: any) => ({
+        ...task,
+        assignees: task.task_assignees?.map((assignee: any) => assignee.profiles) || [],
+      })) || []
+
+      return { data: transformedData, error: null, count: count || 0 }
+    } catch (error) {
+      const appError = ErrorHandler.handleUnknownError(error, 'getTasksWithAssignees')
+      return { data: null, error: appError }
+    }
+  }
+)
+
+/**
+ * Get single project with full details
+ */
+export const getProjectById = cache(
+  async (projectId: string): Promise<QueryResponse<any>> => {
+    try {
+      const supabase = await createSupabaseClient()
+      const user = await getUser()
+      
+      if (!user) {
+        const appError = ErrorHandler.createError(
+          'AUTH_ERROR',
+          'User not authenticated',
+          null,
+          'getProjectById'
+        )
+        return { data: null, error: appError }
+      }
+
+      const { data, error } = await supabase
+        .from('projects')
+        .select(`
+          *,
+          project_members(
+            user_id,
+            role,
+            joined_at,
+            profiles(
+              id,
+              username,
+              avatar_url,
+              email
+            )
+          ),
+          tasks(
+            id,
+            title,
+            status,
+            priority,
+            created_at,
+            due_date
+          )
+        `)
+        .eq('id', projectId)
+        .single()
+
+      if (error) {
+        const appError = ErrorHandler.handleSupabaseError(
+          error,
+          'getProjectById',
+          user.id
+        )
+        return { data: null, error: appError }
+      }
+
+      return { data, error: null }
+    } catch (error) {
+      const appError = ErrorHandler.handleUnknownError(error, 'getProjectById')
+      return { data: null, error: appError }
+    }
+  }
+)
+
+/**
+ * Get notifications for current user
+ */
+export const getNotifications = cache(
+  async (limit = 10, offset = 0): Promise<QueryResponse<any[]>> => {
+    try {
+      const supabase = await createSupabaseClient()
+      const user = await getUser()
+      
+      if (!user) {
+        const appError = ErrorHandler.createError(
+          'AUTH_ERROR',
+          'User not authenticated',
+          null,
+          'getNotifications'
+        )
+        return { data: null, error: appError }
+      }
+
+      const { data, error, count } = await supabase
+        .from('notifications')
+        .select('*', { count: 'exact' })
+        .eq('recipient_id', user.id)
+        .order('created_at', { ascending: false })
+        .range(offset, offset + limit - 1)
+
+      if (error) {
+        const appError = ErrorHandler.handleSupabaseError(
+          error,
+          'getNotifications',
+          user.id
+        )
+        return { data: null, error: appError }
+      }
+
+      return { data: data || [], error: null, count: count || 0 }
+    } catch (error) {
+      const appError = ErrorHandler.handleUnknownError(error, 'getNotifications')
+      return { data: null, error: appError }
+    }
+  }
+)
