@@ -159,7 +159,11 @@ export const OverviewCreateProjectForm = ({
         autoComplete="off"
       />
 
-      <Button variant={'main'} disabled={isPending} className="w-28 text-white">
+      <Button
+        variant={'main'}
+        disabled={isPending}
+        className="ml-auto w-28 text-white"
+      >
         {isPending ? 'Creating...' : 'Create Project'}
       </Button>
     </form>

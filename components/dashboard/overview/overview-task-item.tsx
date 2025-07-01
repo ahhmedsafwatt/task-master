@@ -22,22 +22,26 @@ const getStatusConfig = (status?: Enums<'task_status'> | null) => {
   const statusConfig = {
     IN_PROGRESS: {
       label: 'In Progress',
-      className: 'bg-blue-100 text-blue-800 border-blue-200',
+      className: 'bg-blue-600/60',
     },
     BACKLOG: {
       label: 'Backlog',
-      className: 'bg-gray-100 text-gray-800 border-gray-200',
+      className: 'bg-gray-600/60',
     },
-    COMPLETED: {
-      label: 'Completed',
-      className: 'bg-green-100 text-green-800 border-green-200',
+    DONE: {
+      label: 'Done',
+      className: 'bg-green-600/60',
+    },
+    TODO: {
+      label: 'Todo',
+      className: 'bg-purple-600/60',
     },
   } as const
 
   return (
     statusConfig[status] || {
       label: status,
-      className: 'bg-gray-100 text-gray-800 border-gray-200',
+      className: 'bg-gray-600/60',
     }
   )
 }
@@ -48,26 +52,26 @@ const getPriorityConfig = (priority?: Enums<'task_priority'> | null) => {
   const priorityConfig = {
     URGENT: {
       label: 'Urgent',
-      className: 'bg-red-100 text-red-800 border-red-200',
+      className: 'bg-red-600/60',
     },
     HIGH: {
       label: 'High',
-      className: 'bg-orange-100 text-orange-800 border-orange-200',
+      className: 'bg-orange-600/60',
     },
     MEDIUM: {
       label: 'Medium',
-      className: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+      className: 'bg-yellow-600/60',
     },
     LOW: {
       label: 'Low',
-      className: 'bg-green-100 text-green-800 border-green-200',
+      className: 'bg-green-600/60',
     },
   } as const
 
   return (
     priorityConfig[priority] || {
       label: priority,
-      className: 'bg-gray-100 text-gray-800 border-gray-200',
+      className: 'bg-gray-600/60',
     }
   )
 }
@@ -176,12 +180,12 @@ export const TaskItem = ({ task }: { task: TasksWithAssigness }) => {
             <div className="text-muted-foreground flex items-center gap-1 text-xs">
               <Box className="h-4 w-4" />
               {task.is_private ? (
-                <span className="bg-muted rounded px-2 py-0.5 text-xs">
+                <span className="bg-muted rounded-full px-2 py-0.5 text-xs">
                   Personal task
                 </span>
               ) : (
                 task.project_name && (
-                  <span className="bg-muted line-clamp-1 rounded px-2 py-0.5 text-xs">
+                  <span className="bg-muted line-clamp-1 rounded-full px-2 py-0.5 text-xs">
                     {task.project_name}
                   </span>
                 )

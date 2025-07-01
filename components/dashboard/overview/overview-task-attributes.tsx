@@ -10,6 +10,7 @@ import {
   CircleDashed,
   Loader,
   CircleCheck,
+  Archive,
 } from 'lucide-react'
 import { TaskDatePickerField } from './overview-task-date-picker'
 import { Selections } from './overview-task-selections'
@@ -109,14 +110,18 @@ export const TaskAttributs = ({
         options={[
           {
             option: 'BACKLOG',
-            icon: <CircleDashed />,
+            icon: <Archive className="text-gray-500" />,
+          },
+          {
+            option: 'TODO',
+            icon: <CircleDashed className="text-purple-500" />,
           },
           {
             option: 'IN_PROGRESS',
             icon: <Loader className="text-in-progress" />,
           },
           {
-            option: 'COMPLETED',
+            option: 'DONE',
             icon: <CircleCheck className="text-success" />,
           },
         ]}

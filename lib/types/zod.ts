@@ -65,7 +65,9 @@ export const TaskSchema = z
     markdown_content: z.string().optional(),
     is_private: z.boolean().default(true),
     priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'URGENT']).default('LOW'),
-    status: z.enum(['BACKLOG', 'IN_PROGRESS', 'COMPLETED']).default('BACKLOG'),
+    status: z
+      .enum(['BACKLOG', 'TODO', 'IN_PROGRESS', 'DONE'])
+      .default('BACKLOG'),
     project_id: z.string().nullable().optional(),
     project_name: z.string().nullable().optional(),
     assignee_ids: z.array(z.string()).nullable(),

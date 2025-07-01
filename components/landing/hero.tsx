@@ -47,7 +47,7 @@ export default function Hero() {
               <span className="text-rose-700">Accomplish.</span>
             </m.h1>
             <m.p
-              className="text-primary-foreground mx-auto mb-10 max-w-xl font-mono text-sm sm:text-base md:text-xl"
+              className="text-secondary-foreground mx-auto mb-10 max-w-xl font-mono text-sm sm:text-base md:text-xl"
               variants={enteryVariant}
               initial="initial"
               animate="animate"

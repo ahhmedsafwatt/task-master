@@ -37,7 +37,7 @@ export function OverviewProjectItem({
       className="group block"
       aria-label={`View task: ${title}`}
     >
-      <div className="to-accent from-accent via-secondary flex min-h-36 w-full overflow-hidden rounded-xl border bg-gradient-to-r p-4 shadow-md">
+      <div className="to-accent from-accent via-secondary flex min-h-36 w-full items-center justify-center overflow-hidden rounded-xl border bg-gradient-to-r p-4 shadow-md">
         {/* Cover Image */}
         {project_cover ? (
           <div className="h-30 mr-4 min-w-24 overflow-hidden rounded-md md:min-w-40">
@@ -51,8 +51,8 @@ export function OverviewProjectItem({
             />
           </div>
         ) : (
-          <div className="bg-muted mr-4 flex h-10 w-10 items-center justify-center rounded-lg">
-            <FolderOpen className="h-5 w-5 text-gray-400" />
+          <div className="bg-muted h-30 mr-4 flex min-w-24 items-center justify-center rounded-lg">
+            <FolderOpen className="h-10 w-10 text-gray-400" />
           </div>
         )}
 
@@ -71,7 +71,7 @@ export function OverviewProjectItem({
             )}
           </div>
           {/* Members */}
-          <div className="flex items-center justify-between gap-2 border-t pt-2">
+          <div className="flex items-center justify-between gap-2 pt-2">
             <div className="flex items-center gap-2">
               <Calendar className="text-muted-foreground h-4 w-4" />
               <p className="text-muted-foreground text-xs">{formattedDate}</p>

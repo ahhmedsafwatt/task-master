@@ -133,26 +133,20 @@ export type Database = {
         Row: {
           joined_at: string
           project_id: string
-          project_name: string | null
           role: Database['public']['Enums']['roles']
           user_id: string
-          username: string | null
         }
         Insert: {
           joined_at?: string
           project_id: string
-          project_name?: string | null
           role?: Database['public']['Enums']['roles']
           user_id: string
-          username?: string | null
         }
         Update: {
           joined_at?: string
           project_id?: string
-          project_name?: string | null
           role?: Database['public']['Enums']['roles']
           user_id?: string
-          username?: string | null
         }
         Relationships: [
           {
@@ -179,6 +173,7 @@ export type Database = {
           id: string
           name: string
           project_cover: string | null
+          status: Database['public']['Enums']['project_status'] | null
           updated_at: string
         }
         Insert: {
@@ -188,6 +183,7 @@ export type Database = {
           id?: string
           name: string
           project_cover?: string | null
+          status?: Database['public']['Enums']['project_status'] | null
           updated_at?: string
         }
         Update: {
@@ -197,6 +193,7 @@ export type Database = {
           id?: string
           name?: string
           project_cover?: string | null
+          status?: Database['public']['Enums']['project_status'] | null
           updated_at?: string
         }
         Relationships: [
@@ -244,6 +241,7 @@ export type Database = {
       }
       tasks: {
         Row: {
+          completed_at: string | null
           created_at: string
           creator_id: string
           due_date: string | null
@@ -259,6 +257,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          completed_at?: string | null
           created_at?: string
           creator_id: string
           due_date?: string | null
@@ -274,6 +273,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          completed_at?: string | null
           created_at?: string
           creator_id?: string
           due_date?: string | null
@@ -342,9 +342,10 @@ export type Database = {
         | 'TASK_ASSIGNED'
         | 'TASK_DUE_SOON'
         | 'TASK_OVERDUE'
+      project_status: 'ACTIVE' | 'COMPLETED' | 'ARCHIVED'
       roles: 'VIEWER' | 'MEMBER' | 'ADMIN' | 'OWNER'
       task_priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT'
-      task_status: 'BACKLOG' | 'IN_PROGRESS' | 'COMPLETED'
+      task_status: 'BACKLOG' | 'TODO' | 'IN_PROGRESS' | 'DONE'
     }
     CompositeTypes: {
       [_ in never]: never
@@ -470,9 +471,10 @@ export const Constants = {
         'TASK_DUE_SOON',
         'TASK_OVERDUE',
       ],
+      project_status: ['ACTIVE', 'COMPLETED', 'ARCHIVED'],
       roles: ['VIEWER', 'MEMBER', 'ADMIN', 'OWNER'],
       task_priority: ['LOW', 'MEDIUM', 'HIGH', 'URGENT'],
-      task_status: ['BACKLOG', 'IN_PROGRESS', 'COMPLETED'],
+      task_status: ['BACKLOG', 'TODO', 'IN_PROGRESS', 'DONE'],
     },
   },
 } as const

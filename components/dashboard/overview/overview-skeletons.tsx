@@ -5,13 +5,20 @@ const shimmer =
 export function CardSkeleton() {
   return (
     <div
-      className={`${shimmer} dark:bg-accent bg-secondary relative overflow-hidden rounded-xl p-2 shadow-sm`}
+      className={`${shimmer} relative flex items-center justify-between overflow-hidden rounded-xl p-2 shadow-sm`}
     >
-      <div className="flex p-1.5">
-        <div className="dark:bg-card bg-primary ml-2 h-4 w-12 rounded-md text-sm font-medium" />
+      <div className="flex flex-col gap-2">
+        <div className="bg-primary h-6 w-40 rounded-md" />
+        <div className="bg-primary h-6 w-36 rounded-md" />
+        <div className="bg-primary h-6 w-40 rounded-md" />
       </div>
-      <div className="dark:bg-muted bg-accent flex items-center justify-center truncate rounded-xl px-4 py-6">
-        <div className="dark:bg-card bg-primary h-6 w-24 rounded-md" />
+      <div className="flex h-full flex-col items-end justify-between gap-2">
+        <div className="flex -space-x-3">
+          <div className="bg-primary size-8 rounded-full" />
+          <div className="bg-primary size-8 rounded-full" />
+          <div className="bg-primary size-8 rounded-full" />
+        </div>
+        <div className="bg-primary h-6 w-40 rounded-md" />
       </div>
     </div>
   )

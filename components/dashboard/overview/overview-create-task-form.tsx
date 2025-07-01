@@ -5,13 +5,12 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { useCreateTaskForm } from '@/hooks/use-create-task-form'
 import { ActionResponse } from '@/lib/types/types'
-import { Separator } from '@/components/ui/separator'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { PrivateTaskCheckbox } from './overview-task-private'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import { TaskAttributs } from './task-attributes'
+import { TaskAttributs } from './overview-task-attributes'
 
 // Task form component
 export const OverviewCreateTaskForm = ({
@@ -95,12 +94,10 @@ export const OverviewCreateTaskForm = ({
         onChange={(e) =>
           updateFormDataFields('markdown_content', e.target.value)
         }
-        className="dark:bg-secondary bg-secondary mt-3 h-60 min-h-[100px] resize-none overflow-y-auto text-pretty border-none px-2 pb-3 pt-0 shadow-none ring-0 selection:bg-[#373b67] focus:outline-none focus:ring-0 focus-visible:ring-0"
+        className="dark:bg-secondary bg-secondary mt-8 h-60 min-h-[100px] resize-none overflow-y-auto border-none px-2 pb-3 pt-0 shadow-none ring-0 selection:bg-[#373b67] focus:outline-none focus:ring-0 focus-visible:ring-0"
       />
 
-      <Separator className="my-4" />
-
-      <div className="flex items-center justify-end">
+      <div className="flex items-center justify-end gap-3">
         {/* Private Task Checkbox */}
         <PrivateTaskCheckbox
           isPrivate={formData.is_private!}

@@ -38,3 +38,8 @@ export type TasksWithAssigness = Tasks & {
 export type createTaskFormData = TablesInsert<'tasks'> & {
   assignee_ids: string[]
 }
+export interface StatsCardProps {
+  title: string
+  description?: string
+  icon?: ReactNode
+}

@@ -13,11 +13,11 @@ export default async function Layout({
 }: {
   children: React.ReactNode
 }) {
-  const projects = await getProjects(100)
+  const projects = await getProjects({})
   if (!projects.data) return null
 
   return (
-    <section className="bg-secondary dashboard dark:bg-primary flex max-h-screen overflow-hidden">
+    <section className="bg-secondary dashboard flex max-h-screen overflow-hidden">
       <AppSidebar projects={projects.data} />
       <div className="bg-background dashboard relative m-1.5 h-screen flex-1 overflow-y-auto rounded-md border">
         <DashboardHeader />

@@ -92,7 +92,7 @@ export default function HorizontalSlider({
       <div
         ref={sliderRef}
         className={cn(
-          'flex h-full w-full gap-4 overflow-x-auto',
+          'flex h-full w-full gap-4 overflow-x-auto py-1.5',
           isDragging ? 'select-none' : '',
           className,
         )}

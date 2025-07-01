@@ -11,7 +11,7 @@ create type roles as enum('VIEWER', 'MEMBER', 'ADMIN');
 create type task_priority as enum('LOW', 'MEDIUM', 'HIGH', 'URGENT');
 
 -- Create an enum type "task_status" to represent the status of a task.
-create type task_status as enum('BACKLOG', 'IN_PROGRESS', 'COMPLETED');
+create type task_status as enum('BACKLOG','TODO', 'IN_PROGRESS', 'DONE');
 
 -- Create an enum type "notification_type" for different notification events.
 create type notification_type as enum(
@@ -23,6 +23,8 @@ create type notification_type as enum(
 
 -- Create an enum type "notification_status" to indicate if a notification is read.
 create type notification_status as enum('UNREAD', 'READ');
+
+create type project_status as enum('ACTIVE', 'COMPLETED', 'ARCHIVED')
 
 -- *************************************************************
 -- TABLES & INDEXES
@@ -38,12 +40,14 @@ create table public.profiles (
   updated_at timestamp with time zone default current_timestamp not null -- Automatically records when the profile is last updated
 );
 
+
 -- Create the "public.projects" table to hold project details.
 create table public.projects (
   id UUID primary key default gen_random_uuid (), -- Unique project ID generated automatically
   name TEXT not null, -- Name of the project (required)
   description TEXT, -- Optional project description
   project_cover text,
+  status project_status default 'ACTIVE',
   creator_id UUID references public.profiles (id) on delete CASCADE not null, -- References the profile that created the project
   created_at TIMESTAMPTZ default NOW() not null, -- Time of project creation
   updated_at TIMESTAMPTZ default NOW() not null -- Time of last update
@@ -63,12 +67,14 @@ create table public.tasks (
   project_name text not null,
   markdown_content text,
   priority task_priority default 'LOW', -- Task priority using our custom enum
-  status task_status default 'BACKLOG', -- Task status using our custom enum
+  status task_status default 'TODO', -- Task status using our custom enum
   end_date timestamp, -- Optional start date
   due_date timestamp, -- Optional due date for task completion
   created_at timestamp with time zone default current_timestamp not null, -- Timestamp when the task was created
-  updated_at timestamp with time zone default current_timestamp not null -- Timestamp when the task was last updated
+  updated_at timestamp with time zone default current_timestamp not null, -- Timestamp when the task was last updated
+  completed_at timestamp
 );
+
 
 -- Create indexes on "public.tasks" to improve query performance on project and creator columns.
 create index idx_tasks_project on public.tasks (project_id);
@@ -920,10 +926,10 @@ create policy "Task creators or project admins can delete attachments" on storag
     from
       public.tasks t
       left join public.projects p on t.project_id = p.id
-        left join public.project_members pm on p.id = pm.project_id
-        and pm.user_id = auth.uid ()
-        and pm.role = 'ADMIN'
-      where
+      left join public.project_members pm on p.id = pm.project_id
+      and pm.user_id = auth.uid ()
+      and pm.role = 'ADMIN'
+    where
       (storage.foldername (name)) [1] = t.id::text
       and (
         t.creator_id = auth.uid ()

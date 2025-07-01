@@ -59,31 +59,53 @@ export const getUser = cache(async () => {
  * Get all related Project |
  * fetches all projects from the database if you don't have rls enabled you would have to pass a user_id as a comparison value
  */
-export const getProjects = cache(async (limit = 4) => {
-  try {
-    const supabase = await createSupabaseClient()
-    const { data, error } = await supabase
-      .from('projects')
-      .select()
-      .order('created_at', { ascending: false })
-      .limit(limit)
+export const getProjects = cache(
+  async ({
+    limit,
+    eq,
+    or,
+  }: {
+    limit?: number
+    eq?: { key: string; value: string }
+    or?: { key: string; value: string }[]
+  }) => {
+    try {
+      const supabase = await createSupabaseClient()
+      let query = supabase
+        .from('projects')
+        .select('*', { count: 'exact' })
+        .order('created_at', { ascending: false })
 
-    if (error) {
-      console.error('Supabase query error:', error)
+      if (limit) {
+        query = query.limit(limit)
+      }
+      if (eq) {
+        query = query.eq(eq.key, eq.value)
+      }
+      if (or) {
+        query = query.or(
+          or.map((item) => `${item.key}.eq.${item.value}`).join(','),
+        )
+      }
+      const { data, count, error } = await query
+
+      if (error) {
+        console.error('Supabase query error:', error)
+        return { data: null, error }
+      }
+
+      return { data, count, error: null }
+    } catch (error) {
+      console.error('Unexpected error in getProjects:', error)
       return { data: null, error }
     }
+  },
+)
 
-    return { data, error: null }
-  } catch (error) {
-    console.error('Unexpected error in getProjects:', error)
-    return { data: null, error }
-  }
-})
-
-export const getProjectwithMembers = cache(async (limit = 4) => {
+export const getProjectwithMembers = cache(async (limit?: number) => {
   try {
     const supabase = await createSupabaseClient()
-    const { data, error } = await supabase
+    let query = supabase
       .from('projects')
       .select(
         `
@@ -97,7 +119,10 @@ export const getProjectwithMembers = cache(async (limit = 4) => {
       `,
       )
       .order('created_at', { ascending: false })
-      .limit(limit)
+    if (limit) {
+      query = query.limit(limit)
+    }
+    const { data, error } = await query
 
     if (error) {
       console.error('Supabase query error:', error)
@@ -129,21 +154,24 @@ export const getProjectwithMembers = cache(async (limit = 4) => {
  * Get all related Tasks |
  * fetches all Task from the database if you don't have rls enabled you would have to pass a user_id as a comparison value
  */
-export const getTasks = cache(async (limit = 4) => {
+export const getTasks = cache(async (limit?: number) => {
   try {
     const supabase = await createSupabaseClient()
-    const { data, error } = await supabase
+    let query = supabase
       .from('tasks')
-      .select()
+      .select('*', { count: 'exact' })
       .order('created_at', { ascending: false })
-      .limit(limit)
+    if (limit) {
+      query = query.limit(limit)
+    }
+    const { data, count, error } = await query
 
     if (error) {
       console.error('Supabase query error:', error)
       return { data: null, error }
     }
 
-    return { data, error: null }
+    return { data, count, error: null }
   } catch (error) {
     console.error('Unexpected error in getTasks:', error)
     return { data: null, error }

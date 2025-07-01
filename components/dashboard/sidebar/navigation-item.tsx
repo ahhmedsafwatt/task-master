@@ -21,9 +21,9 @@ export function NavigationItem({
     <Link
       href={href}
       className={cn(
-        'text-secondary-foreground hover:bg-accent hover:text-primary-foreground flex items-center justify-between rounded-md px-2 py-1.5 transition-colors',
+        'hover:bg-accent hover:text-secondary-foreground flex items-center justify-between rounded-md px-2 py-1.5 transition-colors',
         {
-          'bg-background text-primary-foreground font-semibold shadow':
+          'bg-primary hover:bg-primary text-primary-foreground font-semibold shadow':
             isActive,
         },
       )}
