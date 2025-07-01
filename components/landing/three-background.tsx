@@ -1,6 +1,12 @@
 import React, { useRef, useMemo, useState, useEffect } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import * as THREE from 'three'
+// Import only specific Three.js modules instead of the entire library
+import {
+  Color,
+  Mesh,
+  ShaderMaterial,
+  Vector2,
+} from 'three'
 
 // Define types for particle props
 interface ParticleProps {
@@ -14,7 +20,7 @@ interface ParticleProps {
 
 // Create a floating particle
 const Particle = ({ position, direction }: ParticleProps) => {
-  const mesh = useRef<THREE.Mesh>(null)
+  const mesh = useRef<Mesh>(null)
 
   useFrame(() => {
     if (mesh.current) {
@@ -82,19 +88,19 @@ const BackgroundPlane = ({
   // Access the THREE.js objects
   const { size } = useThree()
 
-  const planeRef = useRef<THREE.Mesh>(null)
+  const planeRef = useRef<Mesh>(null)
 
   // Create shader material on mount and update values in useFrame
   React.useEffect(() => {
     if (!planeRef.current) return
 
     // Create material and apply to mesh
-    const material = new THREE.ShaderMaterial({
+    const material = new ShaderMaterial({
       uniforms: {
         u_time: { value: 0 },
-        u_resolution: { value: new THREE.Vector2(size.width, size.height) },
-        u_color1: { value: new THREE.Color(primaryColor) },
-        u_color2: { value: new THREE.Color(secondaryColor) },
+        u_resolution: { value: new Vector2(size.width, size.height) },
+        u_color1: { value: new Color(primaryColor) },
+        u_color2: { value: new Color(secondaryColor) },
       },
       vertexShader: `
         varying vec2 vUv;
@@ -206,16 +212,16 @@ const BackgroundPlane = ({
   useFrame(({ clock }) => {
     if (
       planeRef.current &&
-      planeRef.current.material instanceof THREE.ShaderMaterial
+      planeRef.current.material instanceof ShaderMaterial
     ) {
       const material = planeRef.current.material
       material.uniforms.u_time.value = clock.getElapsedTime()
-      material.uniforms.u_resolution.value = new THREE.Vector2(
+      material.uniforms.u_resolution.value = new Vector2(
         size.width,
         size.height,
       )
-      material.uniforms.u_color1.value = new THREE.Color(primaryColor)
-      material.uniforms.u_color2.value = new THREE.Color(secondaryColor)
+      material.uniforms.u_color1.value = new Color(primaryColor)
+      material.uniforms.u_color2.value = new Color(secondaryColor)
     }
   })
 
@@ -238,7 +244,7 @@ interface ThreeBackgroundProps {
 const ThreeBackground = ({
   primaryColor = '#c70036',
   secondaryColor = '#4d0218',
-  particleCount = 50, // Reduced from 100
+  particleCount = 30, // Further reduced for better performance
   className = '',
 }: ThreeBackgroundProps) => {
   const [opacity, setOpacity] = useState(0)
@@ -250,6 +256,18 @@ const ThreeBackground = ({
     }, 750)
     return () => clearTimeout(timer)
   }, [])
+
+  // Memoize expensive calculations
+  const memoizedBackgroundPlane = useMemo(() => (
+    <BackgroundPlane
+      primaryColor={primaryColor}
+      secondaryColor={secondaryColor}
+    />
+  ), [primaryColor, secondaryColor])
+
+  const memoizedParticles = useMemo(() => (
+    <Particles count={particleCount} />
+  ), [particleCount])
 
   return (
     <div
@@ -264,14 +282,16 @@ const ThreeBackground = ({
         gl={{
           antialias: false, // Disable antialiasing for performance
           powerPreference: 'high-performance',
+          alpha: false, // Disable alpha channel for performance
+          depth: false, // Disable depth buffer if not needed
+          stencil: false, // Disable stencil buffer
         }}
-        dpr={[1, 1.5]} // Limit pixel ratio for performance
+        dpr={Math.min(window.devicePixelRatio, 2)} // Cap pixel ratio for performance
+        frameloop="demand" // Only render when needed
+        performance={{ min: 0.5 }} // Lower performance threshold
       >
-        <BackgroundPlane
-          primaryColor={primaryColor}
-          secondaryColor={secondaryColor}
-        />
-        <Particles count={particleCount} />
+        {memoizedBackgroundPlane}
+        {memoizedParticles}
       </Canvas>
     </div>
   )

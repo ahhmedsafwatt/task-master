@@ -5,8 +5,11 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "build:analyze": "npm run build && node scripts/analyze-bundle.js",
     "start": "next start",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "perf": "npm run build && npx lighthouse http://localhost:3000 --output=html --output-path=./reports/lighthouse.html --chrome-flags=\"--headless\"",
+    "bundle-analyzer": "node scripts/analyze-bundle.js"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.11",
@@ -35,7 +38,6 @@
     "@tailwindcss/postcss": "^4.1.8",
     "@tanstack/react-query": "^5.80.6",
     "@tanstack/react-query-devtools": "^5.80.7",
-    "@types/recharts": "^2.0.1",
     "@types/three": "^0.176.0",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
@@ -61,6 +63,7 @@
     "three": "^0.176.0",
     "tree-sitter-typescript": "^0.23.2",
     "use-debounce": "^10.0.4",
+    "web-vitals": "^5.0.3",
     "zod": "^3.25.56"
   },
   "devDependencies": {

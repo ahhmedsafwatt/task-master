@@ -1,7 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { LazyMotion, domAnimation, type Variants } from 'motion/react'
-import * as m from 'motion/react-m'
+import { LazyMotion, domAnimation, motion, type Variants } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Github } from 'lucide-react'
 import { FlipingText } from '@/components/ui/fliping-text'
@@ -35,7 +34,7 @@ export default function Hero() {
 
         <div className="container relative mx-auto px-4 py-28">
           <div className="text-center">
-            <m.h1
+            <motion.h1
               className="font-cabinet mx-auto mb-4 text-4xl font-black tracking-tighter sm:text-5xl md:text-6xl"
               variants={enteryVariant}
               initial="initial"
@@ -45,8 +44,8 @@ export default function Hero() {
             >
               Schedule. Organize.{' '}
               <span className="text-rose-700">Accomplish.</span>
-            </m.h1>
-            <m.p
+            </motion.h1>
+            <motion.p
               className="text-primary-foreground mx-auto mb-10 max-w-xl font-mono text-sm sm:text-base md:text-xl"
               variants={enteryVariant}
               initial="initial"
@@ -54,8 +53,8 @@ export default function Hero() {
               transition={{ duration: 0.4, delay: 0.3 }}
             >
               An open-source alternative for Notion and Linear (Not Really)
-            </m.p>
-            <m.div
+            </motion.p>
+            <motion.div
               className="flex justify-center space-x-4"
               variants={enteryVariant}
               initial="initial"
@@ -74,7 +73,7 @@ export default function Hero() {
                   <FlipingText initialText="Get Started" />
                 </Button>
               </Link>
-            </m.div>
+            </motion.div>
           </div>
         </div>
       </LazyMotion>

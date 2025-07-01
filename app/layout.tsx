@@ -3,9 +3,11 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata } from 'next'
 import { geistmono, inter, cabinet } from '@/lib/fonts'
 import Provider from '@/lib/providers/provider'
+import { PerformanceMonitor } from '@/components/performance-monitor'
 import './globals.css'
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://task-master-drab-delta.vercel.app'),
   title: {
     default: 'Task Master',
     template: 'Task Master | %s',
@@ -16,10 +18,21 @@ export const metadata: Metadata = {
   authors: [{ name: 'Ahmed Safwat' }],
   creator: 'Task Master',
   publisher: 'Task Master',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://task-master-drab-delta.vercel.app/',
+    url: '/',
     title: 'Task Master - Efficient Task Management',
     description:
       'Streamline your workflow with Task Master - the intuitive task management application that helps you organize, prioritize, and track your projects efficiently.',
@@ -40,6 +53,9 @@ export const metadata: Metadata = {
       'Streamline your workflow with Task Master - the intuitive task management application.',
     images: ['/images/og-image.jpg'],
   },
+  verification: {
+    google: 'google-site-verification-token', // Add your verification token
+  },
 }
 
 export default function RootLayout({
@@ -57,6 +73,7 @@ export default function RootLayout({
           {children}
           <SpeedInsights />
           <Analytics />
+          <PerformanceMonitor />
         </Provider>
       </body>
     </html>
