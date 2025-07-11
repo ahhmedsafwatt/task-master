@@ -80,9 +80,6 @@ export function LandingFooter() {
                     </Button>
                   ))}
                 </div>
-                <div className="ml-2">
-                  <ThemeToggle />
-                </div>
               </div>
             </div>
 
