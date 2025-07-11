@@ -5,7 +5,6 @@ import { Logo } from '@/components/ui/logo'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { FooterLinkSection } from './footer-links'
-import { ThemeToggle } from '@/components/ui/theme-toggle'
 
 const navigationItems = [
   { title: 'Features', href: 'features' },
@@ -80,9 +79,7 @@ export function LandingFooter() {
                     </Button>
                   ))}
                 </div>
-                <div className="ml-2">
-                  <ThemeToggle />
-                </div>
+
               </div>
             </div>
 

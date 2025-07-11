@@ -3,6 +3,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata } from 'next'
 import { geistmono, inter, cabinet } from '@/lib/fonts'
 import Provider from '@/lib/providers/provider'
+import { LandingDarkWrapper } from '@/components/landing/landing-dark-wrapper'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -53,11 +54,13 @@ export default function RootLayout({
         className={`${inter.variable} ${geistmono.variable} ${cabinet.variable} antialiased`}
         suppressHydrationWarning
       >
-        <Provider>
-          {children}
-          <SpeedInsights />
-          <Analytics />
-        </Provider>
+        <LandingDarkWrapper>
+          <Provider>
+            {children}
+            <SpeedInsights />
+            <Analytics />
+          </Provider>
+        </LandingDarkWrapper>
       </body>
     </html>
   )

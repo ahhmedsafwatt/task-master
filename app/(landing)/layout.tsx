@@ -7,7 +7,7 @@ export default function MainLayout({
   children: React.ReactNode
 }>) {
   return (
-    <div className="landing">
+    <div className="landing dark">
       <LandingHeader />
       {children}
       <LandingFooter />
